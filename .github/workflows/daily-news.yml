@@ -1,9 +1,9 @@
-name: Daily News Aggregator
+name: Auto News Every 5 Minutes
 
 on:
   schedule:
-    # Каждый день в 17:00 UTC = 20:00 МСК
-    - cron: '0 17 * * *'
+    # Каждые 5 минут (GitHub позволяет минимум 5 мин)
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,16 +19,15 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run aggregator
         run: python aggregator.py
 
-      - name: Commit and push
+      - name: Commit and push if changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add news.json
-          git diff --staged --quiet || git commit -m "📰 Auto-update: $(date '+%d.%m.%Y %H:%M')"
+          git diff --staged --quiet || git commit -m "📰 Auto-update $(date '+%H:%M') - $(jq '.total' news.json) news"
           git push
