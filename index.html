@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СВОЁ МНЕНИЕ | Ежедневный обзор горячих событий</title>
+    <meta name="description" content="Ежедневный агрегатор самых горячих новостей и событий из проверенных источников. Новый выпуск каждый день в 20:00.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Playfair Display (заголовки), Inter (текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F9F7F2',
+                        ink: '#1A1A1A',
+                        accent: '#D90429', // Красный для "горячих" новостей
+                        accentHover: '#EF233C',
+                        muted: '#6B7280'
+                    },
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F9F7F2; color: #1A1A1A; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* Бегущая строка */
+        .ticker-wrap { overflow: hidden; white-space: nowrap; background: #1A1A1A; color: #F9F7F2; }
+        .ticker { display: inline-block; animation: ticker 40s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        /* Эффект наведения на карточку */
+        .news-card { transition: all 0.3s ease; }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .news-card:hover .news-img { transform: scale(1.05); }
+        .news-img { transition: transform 0.5s ease; }
+
+        /* Таймер */
+        .countdown-box {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(217, 4, 41, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Бегущая строка -->
+    <div class="ticker-wrap py-2 text-xs font-mono tracking-widest uppercase">
+        <div class="ticker">
+            <span class="mx-4 text-accent">● СРОЧНО</span> Новые данные по глобальным рынкам 
+            <span class="mx-4 text-gray-500">|</span> 
+            <span class="mx-4 text-accent">● ОБЗОР</span> Технологии недели: что изменилось 
+            <span class="mx-4 text-gray-500">|</span> 
+            <span class="mx-4 text-accent">● МНЕНИЕ</span> Эксперты о будущих трендах 
+            <span class="mx-4 text-gray-500">|</span> 
+            <span class="mx-4 text-accent">● СРОЧНО</span> Новые данные по глобальным рынкам 
+            <span class="mx-4 text-gray-500">|</span> 
+            <span class="mx-4 text-accent">● ОБЗОР</span> Технологии недели: что изменилось 
+        </div.
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-paper/90 backdrop-blur-md border-b border-ink/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="flex flex-col">
+                    <span class="font-display text-3xl font-black text-ink tracking-tight leading-none">СВОЁ МНЕНИЕ</span>
+                    <span class="text-[10px] font-mono text-muted tracking-[0.2em] uppercase mt-1">Ежедневный агрегатор событий</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#main" class="text-sm font-semibold text-ink hover:text-accent transition-colors">Главное</a>
+                    <a href="#politics" class="text-sm font-semibold text-ink hover:text-accent transition-colors">Политика</a>
+                    <a href="#tech" class="text-sm font-semibold text-ink hover:text-accent transition-colors">Технологии</a>
+                    <a href="#opinion" class="text-sm font-semibold text-ink hover:text-accent transition-colors">Мнения</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-4">
+                    <div class="hidden lg:flex flex-col items-end">
+                        <span class="text-xs font-mono text-muted" id="current-date">Загрузка даты...</span>
+                        <span class="text-xs font-bold text-accent flex items-center gap-1">
+                            <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span> Выпуск в 20:00
+                        </span>
+                    </div>
+                    <button class="md:hidden text-ink text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden bg-paper border-t border-ink/10 absolute w-full" id="mobile-menu">
+            <div class="px-6 py-4 space-y-3">
+                <a href="#main" class="block text-base font-semibold text-ink">Главное</a>
+                <a href="#politics" class="block text-base font-semibold text-ink">Политика</a>
+                <a href="#tech" class="block text-base font-semibold text-ink">Технологии</a>
+                <a href="#opinion" class="block text-base font-semibold text-ink">Мнения</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section: Главное событие дня -->
+    <section id="main" class="py-12 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center reveal active">
+                <!-- Image -->
+                <div class="lg:col-span-7 relative group overflow-hidden rounded-sm">
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1200&auto=format&fit=crop" 
+                         alt="Главная новость" class="w-full h-[400px] md:h-[500px] object-cover news-img">
+                    <div class="absolute top-4 left-4 bg-accent text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">
+                        Главное за сегодня
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="lg:col-span-5 lg:pl-8">
+                    <div class="flex items-center gap-2 text-sm text-muted mb-4 font-mono">
+                        <span>Агрегировано из 12 источников</span>
+                        <span>•</span>
+                        <span>5 мин чтения</span>
+                    </div>
+                    <h1 class="font-display text-4xl md:text-5xl font-bold text-ink leading-tight mb-6">
+                        Глобальный сдвиг: как новые технологии меняют правила игры на мировых рынках
+                    </h1>
+                    <p class="text-lg text-gray-600 leading-relaxed mb-8">
+                        Мы проанализировали десятки публикаций ведущих мировых изданий, чтобы собрать для вас полную картину происходящего. Эксперты сходятся во мнении: точка невозврата уже пройдена.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 bg-ink/5 text-ink text-xs font-semibold rounded-full">#Технологии</span>
+                        <span class="px-3 py-1 bg-ink/5 text-ink text-xs font-semibold rounded-full">#Экономика</span>
+                        <span class="px-3 py-1 bg-ink/5 text-ink text-xs font-semibold rounded-full">#Аналитика</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown & Sidebar Layout -->
+    <div class="bg-ink text-paper py-8 border-y border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h3 class="font-display text-2xl font-bold mb-1">Следующий выпуск через:</h3>
+                <p class="text-gray-400 text-sm">Мы автоматически собираем и проверяем факты. Новая подборка будет опубликована ровно в 20:00 по МСК.</p>
+            </div>
+            <div class="countdown-box rounded-lg p-4 flex gap-4 md:gap-8 text-center">
+                <div>
+                    <div class="text-3xl md:text-4xl font-display font-bold text-accent" id="hours">00</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-400 mt-1">Часов</div>
+                </div>
+                <div class="text-3xl font-display text-gray-600">:</div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-display font-bold text-accent" id="minutes">00</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-400 mt-1">Минут</div>
+                </div>
+                <div class="text-3xl font-display text-gray-600">:</div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-display font-bold text-accent" id="seconds">00</div>
+                    <div class="text-[10px] uppercase tracking-widest text-gray-400 mt-1">Секунд</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Grid -->
+    <section class="py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-12 reveal">
+                <div>
+                    <h2 class="font-display text-4xl font-bold text-ink mb-2">Сводка событий</h2>
+                    <p class="text-muted">Самое важное из разных источников, собранное в одном месте</p>
+                </div>
+                <a href="#" class="hidden md:flex items-center gap-2 text-accent font-semibold hover:text-accentHover transition-colors">
+                    Смотреть архив <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Grid Container (Заполняется через JS) -->
+            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Карточки будут добавлены скриптом -->
+            </div>
+        </div
+    </section>
+
+    <!-- Opinion Section -->
+    <section id="opinion" class="py-20 bg-ink text-paper relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <span class="text-accent font-mono text-sm tracking-widest uppercase mb-2 block">Колонка редактора</span>
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Своё мнение</h2>
+                <div class="w-24 h-1 bg-accent mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center reveal">
+                <div class="relative">
+                    <i class="fa-solid fa-quote-left text-6xl text-accent/20 absolute -top-6 -left-4"></i>
+                    <p class="font-display text-2xl md:text-3xl italic leading-relaxed mb-6">
+                        "В эпоху информационного шума наша задача — не просто пересказывать новости, а находить связи между событиями, которые другие упускают. Мы фильтруем шум, оставляя только суть."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gray-600 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg">Александр В.</div>
+                            <div class="text-gray-400 text-sm">Главный редактор, аналитик</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-8">
+                    <h3 class="font-display text-2xl font-bold mb-4">Подпишитесь на рассылку</h3>
+                    <p class="text-gray-400 mb-6 text-sm">Получайте краткую выжимку самых горячих событий прямо на почту каждый день в 20:05.</p>
+                    <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); alert('Спасибо за подписку!');">
+                        <input type="email" placeholder="Ваш email" required class="flex-1 bg-white/10 border border-white/20 rounded px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-accent">
+                        <button type="submit" class="bg-accent hover:bg-accentHover text-white font-bold px-6 py-3 rounded transition-colors">
+                            Подписаться
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-paper border-t border-ink/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="font-display text-2xl font-black text-ink tracking-tight">СВОЁ МНЕНИЕ</span>
+                    <p class="text-muted mt-4 max-w-sm leading-relaxed">
+                        Независимый агрегатор новостей. Мы используем алгоритмы и редакторскую проверку для создания объективной картины дня.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-ink mb-4">Разделы</h4>
+                    <ul class="space-y-2 text-sm text-muted">
+                        <li><a href="#" class="hover:text-accent transition-colors">Главное за день</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">Политика</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">Экономика</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">Технологии</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-ink mb-4">Юридическая информация</h4>
+                    <ul class="space-y-2 text-sm text-muted">
+                        <li><a href="#" class="hover:text-accent transition-colors">О проекте</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">Источники данных</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-ink/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted">
+                <p>© 2024 СВОЁ МНЕНИЕ. Все права защищены.</p>
+                <p class="mt-2 md:mt-0">Новости агрегируются из открытых источников.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // 1. Установка текущей даты
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('ru-RU', dateOptions);
+
+        // 2. Таймер обратного отсчета до 20:00
+        function updateCountdown() {
+            const now = new Date();
+            const target = new Date();
+            target.setHours(20, 0, 0, 0);
+            
+            if (now > target) {
+                target.setDate(target.getDate() + 1); // Если уже после 20:00, целимся на завтра
+            }
+            
+            const diff = target - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 3. Генерация новостей (Имитация данных с бэкенда)
+        // В реальном проекте этот массив будет приходить из JSON-файла, который обновляет ваш Python-скрипт в 20:00
+        const newsData = [
+            {
+                category: "Технологии",
+                title: "Искусственный интеллект научился предсказывать рыночные крахи с точностью 89%",
+                excerpt: "Новое исследование показывает, что алгоритмы машинного обучения анализируют новостной фон быстрее людей.",
+                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+                source: "TechCrunch, РБК",
+                time: "Сегодня, 18:30"
+            },
+            {
+                category: "Экономика",
+                title: "Центробанки мира синхронно меняют валютную политику",
+                excerpt: "Анализ заявлений глав регуляторов указывает на грядущие серьезные изменения в глобальной финансовой системе.",
+                image: "https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=800&auto=format&fit=crop",
+                source: "Bloomberg, Ведомости",
+                time: "Сегодня, 16:15"
+            },
+            {
+                category: "Общество",
+                title: "Урбанистика будущего: как города отказываются от личных автомобилей",
+                excerpt: "Европейские мегаполисы запускают беспрецедентные программы по расширению пешеходных зон и велоинфраструктуры.",
+                image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=800&auto=format&fit=crop",
+                source: "The Guardian, Медуза",
+                time: "Сегодня, 14:00"
+            },
+            {
+                category: "Наука",
+                title: "Прорыв в квантовых вычислениях: новый рекорд стабильности кубитов",
+                excerpt: "Ученым удалось сохранить квантовое состояние на 50% дольше, чем в предыдущих экспериментах.",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop",
+                source: "Nature, N+1",
+                time: "Сегодня, 12:45"
+            },
+            {
+                category: "Политика",
+                title: "Саммит G20: ключевые договоренности, о которых молчат заголовки",
+                excerpt: "За закрытыми дверями были подписаны соглашения, которые изменят логистические цепочки на ближайшие 10 лет.",
+                image: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=800&auto=format&fit=crop",
+                source: "Reuters, Коммерсантъ",
+                time: "Сегодня, 10:20"
+            },
+            {
+                category: "Культура",
+                title: "Цифровое искусство выходит на новый уровень: аукционные рекорды",
+                excerpt: "Несмотря на спад на крипторынке, институциональные инвесторы продолжают скупать цифровые активы.",
+                image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop",
+                source: "ArtNews, The Art Newspaper",
+                time: "Вчера, 21:00"
+            }
+        ];
+
+        // Рендеринг новостей
+        const grid = document.getElementById('news-grid');
+        newsData.forEach((item, index) => {
+            const card = document.createElement('article');
+            card.className = `news-card bg-white rounded-sm overflow-hidden border border-ink/5 reveal`;
+            card.style.transitionDelay = `${index * 100}ms`;
+            card.innerHTML = `
+                <div class="relative h-56 overflow-hidden">
+                    <img src="${item.image}" alt="${item.title}" class="news-img w-full h-full object-cover">
+                    <div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-ink text-[10px] font-bold px-2 py-1 uppercase tracking-wider">
+                        ${item.category}
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-muted mb-3 font-mono">
+                        <span>${item.source}</span>
+                        <span>•</span>
+                        <span>${item.time}</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-ink mb-3 leading-snug hover:text-accent transition-colors cursor-pointer">
+                        ${item.title}
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                        ${item.excerpt}
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 text-accent text-sm font-semibold hover:gap-3 transition-all">
+                        Читать обзор <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // 4. Анимация при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
