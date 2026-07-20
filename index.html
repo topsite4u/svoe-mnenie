@@ -1,839 +1,616 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>СВОЁ МНЕНИЕ | Live-Агрегатор 100+ Изданий</title>
-    <meta name="description" content="Мгновенный агрегатор новостей из 100+ мировых и российских источников. Без дубликатов. Автообновление.">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        paper: '#FAFAF9',
-                        ink: '#0C0A09',
-                        accent: '#DC2626', // Красный для срочных новостей
-                        accentHover: '#B91C1C',
-                        surface: '#FFFFFF',
-                        surfaceDark: '#1C1917',
-                    },
-                    fontFamily: {
-                        display: ['Playfair Display', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'shimmer': 'shimmer 2s infinite linear',
-                        'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        shimmer: {
-                            '0%': { backgroundPosition: '-200% 0' },
-                            '100%': { backgroundPosition: '200% 0' }
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        /* Базовые стили и сброс */
-        body {
-            background-color: #FAFAF9;
-            color: #0C0A09;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .dark body {
-            background-color: #0C0A09;
-            color: #FAFAF9;
-        }
-
-        /* Кастомный скроллбар */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 4px; }
-        .dark ::-webkit-scrollbar-thumb { background: #44403C; }
-        ::-webkit-scrollbar-thumb:hover { background: #DC2626; }
-
-        /* Скелетон загрузка */
-        .skeleton {
-            background: linear-gradient(90deg, #E7E5E4 25%, #F5F5F4 50%, #E7E5E4 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        .dark .skeleton {
-            background: linear-gradient(90deg, #292524 25%, #44403C 50%, #292524 75%);
-        }
-
-        /* Карточка новости */
-        .news-card {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .dark .news-card {
-            border-color: rgba(255,255,255,0.05);
-        }
-        .news-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-            border-color: rgba(220, 38, 38, 0.3);
-        }
-        .news-card:hover .news-img {
-            transform: scale(1.08);
-        }
-        .news-img {
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Бейджи источников */
-        .source-badge {
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            padding: 0.25rem 0.6rem;
-            border-radius: 9999px;
-            backdrop-filter: blur(4px);
-        }
-
-        /* Тикер */
-        .ticker-wrap {
-            overflow: hidden;
-            white-space: nowrap;
-            background: #0C0A09;
-            color: #FAFAF9;
-        }
-        .dark .ticker-wrap {
-            background: #DC2626;
-        }
-        .ticker {
-            display: inline-block;
-            animation: ticker 45s linear infinite;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Утилиты */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        /* Скрытие элементов для анимации */
-        .reveal-item {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NewsLab — полноценное новостное агентство с собственным мнением</title>
+  <meta name="description" content="Полноценное медиа-приложение с редакторским голосом, подборками, лайками, избранным и RSS-движком." />
+  <meta name="theme-color" content="#07111D" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #050914;
+      --bg2: #0a1422;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --line: rgba(255,255,255,0.11);
+      --text: #f4f7fb;
+      --muted: #8ca2b8;
+      --accent: #3197FF;
+      --accent2: #F2BF4C;
+      --accent3: #8B5CF6;
+      --accent-soft: rgba(49,151,255,0.16);
+      --accent-soft-2: rgba(242,191,76,0.12);
+      --good: #34D399;
+      --radius: 22px;
+      --shadow: 0 18px 42px rgba(0,0,0,0.24);
+      --shadow-soft: 0 8px 20px rgba(2,8,20,0.16);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-feature-settings: 'kern' 1;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(49,151,255,0.10), transparent 22%),
+        radial-gradient(circle at 85% 0%, rgba(242,191,76,0.08), transparent 26%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 16px;
+      line-height: 1.62;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.65), transparent);
+    }
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .app { max-width: 1380px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+      backdrop-filter: blur(22px);
+    }
+    .glass.panel:last-child {
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px;
+      position: sticky; top: 10px; z-index: 30;
+      border-radius: 22px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+    .brand-mark {
+      width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent3)); color: white;
+      box-shadow: 0 12px 28px rgba(49,151,255,0.26);
+    }
+    .brand-sub { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.16em; }
+    .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill, .icon-btn, .chip, .tab-btn, .action-btn, .nav-btn, .story-pill {
+      border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--text);
+      padding: 10px 12px; border-radius: 999px; cursor: pointer; transition: transform .22s cubic-bezier(.2,.8,.2,1), background .22s ease, border-color .22s ease, color .22s ease;
+    }
+    .pill:hover, .icon-btn:hover, .chip:hover, .tab-btn:hover, .action-btn:hover, .nav-btn:hover, .story-pill:hover {
+      transform: translateY(-1px); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.09);
+    }
+    .pill.active, .tab-btn.active, .nav-btn.active {
+      background: linear-gradient(135deg, rgba(49,151,255,0.16), rgba(242,191,76,0.12));
+      border-color: rgba(255,255,255,0.16);
+      color: #f8fbff;
+      box-shadow: var(--shadow-soft);
+    }
+    .hero { display: grid; grid-template-columns: 1.4fr 0.9fr; gap: 16px; }
+    .hero-main { padding: 24px; min-height: 300px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .hero-main::after {
+      content: ''; position: absolute; inset: auto -40px -40px auto; width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(49,151,255,0.28), transparent 70%); pointer-events: none; filter: blur(6px);
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06); color: #dce8f9; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; width: fit-content; margin-bottom: 12px;
+    }
+    .hero h1 { margin: 0 0 12px; font-size: clamp(1.9rem, 3vw, 3.1rem); line-height: 1.04; letter-spacing: -0.04em; font-weight: 800; }
+    .hero p { margin: 0; color: var(--muted); max-width: 700px; line-height: 1.66; font-size: 0.98rem; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .primary-btn, .secondary-btn {
+      padding: 11px 14px; border-radius: 999px; border: 1px solid transparent; font-weight: 700; cursor: pointer; transition: transform .2s ease;
+    }
+    .primary-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #07111D; }
+    .secondary-btn { background: rgba(255,255,255,0.08); border-color: var(--line); color: var(--text); }
+    .primary-btn:hover, .secondary-btn:hover { transform: translateY(-1px); }
+    .stats { padding: 20px; display: grid; gap: 10px; }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-label { color: var(--muted); font-size: 0.92rem; }
+    .stat-value { font-size: 1.12rem; font-weight: 800; }
+    .content { display: grid; grid-template-columns: 1.34fr .78fr; gap: 18px; align-items: start; }
+    .panel { padding: 20px; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .panel-header h3 { margin: 0; font-size: 1.06rem; letter-spacing: -0.01em; font-weight: 700; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .stories { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; }
+    .story-pill { min-width: 94px; text-align: center; padding: 10px; border-radius: 16px; }
+    .story-pill strong { display: block; font-size: 0.8rem; }
+    .story-pill span { color: var(--muted); font-size: 0.72rem; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .section-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .section-btn {
+      padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05); color: var(--muted); cursor: pointer;
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+    .section-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.1); color: var(--text); }
+    .section-btn.active { background: linear-gradient(135deg, rgba(49,151,255,0.22), rgba(242,191,76,0.16)); color: var(--text); border-color: rgba(255,255,255,0.24); }
+    .search-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .search-box { flex: 1; min-width: 220px; padding: 12px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.07); color: var(--text); outline: none; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .chip.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.24); }
+    .feed-list { display: grid; gap: 12px; }
+    .feed-card {
+      padding: 15px 16px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.05);
+      display: grid; gap: 10px; transition: transform .24s cubic-bezier(.2,.8,.2,1), border-color .24s ease, background .24s ease, box-shadow .24s ease; cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 7px 18px rgba(2,8,20,0.10);
+    }
+    .feed-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.07); box-shadow: 0 9px 20px rgba(2,8,20,0.14); }
+    .feed-card h4 { font-size: 1.01rem; line-height: 1.36; letter-spacing: -0.01em; }
+    .feed-card p { font-size: 0.94rem; line-height: 1.66; }
+    .feed-head, .feed-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 0.84rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 9px; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+    .badge.opinion { background: rgba(242,191,76,0.16); color: #ffd997; }
+    .badge.rss { background: rgba(49,151,255,0.16); color: #b7d7ff; }
+    .feed-card h4 { margin: 0; font-size: 1rem; line-height: 1.45; }
+    .feed-card p { margin: 0; color: var(--muted); font-size: 0.94rem; line-height: 1.65; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn.active {
+      background: rgba(49,151,255,0.12);
+      border-color: rgba(49,151,255,0.24);
+      color: #f6fbff;
+      box-shadow: none;
+    }
+    .action-btn.active[data-action="save"] {
+      background: rgba(52,211,153,0.12);
+      border-color: rgba(52,211,153,0.22);
+    }
+    .mini-card { padding: 13px 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.05); margin-bottom: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+    .mini-card h4 { margin: 0 0 6px; font-size: 0.96rem; line-height: 1.35; }
+    .mini-card p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .trend-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--muted); font-size: 0.92rem; }
+    .trend-item:last-child { border-bottom: none; }
+    .trend-item strong { color: var(--text); }
+    .empty { padding: 20px; text-align: center; color: var(--muted); border: 1px dashed rgba(255,255,255,0.14); border-radius: 18px; background: rgba(255,255,255,0.04); }
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px; z-index: 60; background: rgba(3,8,18,0.72); backdrop-filter: blur(10px); }
+    .modal.open { display: flex; }
+    .modal-card { width: min(820px, 100%); max-height: 90vh; overflow: auto; padding: 24px; border-radius: 30px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06)); box-shadow: var(--shadow); position: relative; }
+    .modal-card h3 { margin: 0 0 10px; font-size: 1.45rem; line-height: 1.3; }
+    .modal-card p { color: var(--muted); line-height: 1.8; }
+    .close-btn { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
+    .mobile-nav { display: none; justify-content: center; margin-top: 6px; }
+    .mobile-nav .inner { display: flex; gap: 8px; padding: 8px; border-radius: 999px; background: rgba(7,17,29,0.9); border: 1px solid var(--line); box-shadow: var(--shadow); width: min(460px, 100%); }
+    .mobile-nav .nav-btn { flex: 1; text-align: center; padding: 10px 8px; font-size: 0.84rem; }
+    @media (max-width: 1050px) { .hero { grid-template-columns: 1fr; } .content { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) {
+      body { padding: 12px; }
+      .topbar { flex-wrap: wrap; border-radius: 24px; }
+      .top-actions { width: 100%; justify-content: flex-start; }
+      .mobile-nav { display: flex; }
+    }
+  </style>
 </head>
-<body class="antialiased">
-
-    <!-- Live Top Bar -->
-    <div class="ticker-wrap py-2 text-[11px] font-mono tracking-wider uppercase relative z-50">
-        <div class="ticker" id="live-ticker">
-            <span class="mx-6 text-accent font-bold">● LIVE ОБНОВЛЕНИЕ</span>
-            <span class="mx-6 text-gray-400">Система анализирует 105 источников в реальном времени</span>
-            <span class="mx-6 text-gray-400">|</span>
-            <span class="mx-6 text-gray-400">Последняя синхронизация: <span id="last-sync-time">только что</span></span>
-            <span class="mx-6 text-gray-400">|</span>
-            <span class="mx-6 text-accent font-bold">● LIVE ОБНОВЛЕНИЕ</span>
-            <span class="mx-6 text-gray-400">Система анализирует 105 источников в реальном времени</span>
-            <span class="mx-6 text-gray-400">|</span>
-            <span class="mx-6 text-gray-400">Последняя синхронизация: <span id="last-sync-time-2">только что</span></span>
+<body>
+  <div class="app">
+    <header class="topbar glass">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div>
+          <div>NewsLab</div>
+          <div class="brand-sub">Собственное мнение. Редакционный ритм.</div>
         </div>
-    </div>
-
-    <!-- Header -->
-    <header class="sticky top-0 z-40 bg-paper/90 dark:bg-ink/90 backdrop-blur-xl border-b border-stone-200 dark:border-stone-800 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="#" class="flex flex-col group" onclick="app.resetFilters()">
-                    <span class="font-display text-3xl font-black text-ink dark:text-paper tracking-tight leading-none group-hover:text-accent transition-colors">
-                        СВОЁ МНЕНИЕ
-                    </span>
-                    <span class="text-[10px] font-mono text-stone-500 dark:text-stone-400 tracking-[0.25em] uppercase mt-1">
-                        Premium News Aggregator
-                    </span>
-                </a>
-
-                <!-- Desktop Controls -->
-                <div class="hidden lg:flex items-center gap-6">
-                    <!-- Search -->
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="text" id="search-input" placeholder="Поиск по всем изданиям..." 
-                               class="bg-stone-100 dark:bg-stone-800 border-none rounded-full py-2.5 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-accent/50 outline-none transition-all dark:text-white placeholder-stone-500">
-                    </div>
-                    
-                    <!-- Theme Toggle -->
-                    <button onclick="app.toggleTheme()" class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 hover:bg-accent hover:text-white transition-all">
-                        <i class="fa-solid fa-moon dark:hidden"></i>
-                        <i class="fa-solid fa-sun hidden dark:block"></i>
-                    </button>
-
-                    <!-- Bookmarks Toggle -->
-                    <button onclick="app.toggleBookmarksView()" class="relative w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-600 dark:text-stone-300 hover:bg-accent hover:text-white transition-all">
-                        <i class="fa-solid fa-bookmark"></i>
-                        <span id="bookmark-count" class="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
-                    </button>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button class="lg:hidden text-ink dark:text-paper text-2xl p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div class="hidden lg:hidden bg-paper dark:bg-ink border-t border-stone-200 dark:border-stone-800 absolute w-full shadow-xl" id="mobile-menu">
-            <div class="px-6 py-6 space-y-4">
-                <input type="text" id="mobile-search-input" placeholder="Поиск новостей..." 
-                       class="w-full bg-stone-100 dark:bg-stone-800 rounded-lg py-3 px-4 text-sm outline-none dark:text-white mb-4">
-                <div class="flex flex-wrap gap-2" id="mobile-categories">
-                    <!-- Заполняется JS -->
-                </div>
-                <div class="pt-4 border-t border-stone-200 dark:border-stone-800 flex justify-between items-center">
-                    <span class="text-sm text-stone-500">Тёмная тема</span>
-                    <button onclick="app.toggleTheme()" class="w-12 h-6 bg-stone-200 dark:bg-accent rounded-full relative transition-colors">
-                        <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform dark:translate-x-6"></div>
-                    </button>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="top-actions">
+        <button class="pill active"><i class="fa-solid fa-rss"></i> RSS + редакция</button>
+        <button class="pill"><i class="fa-solid fa-fire"></i> Горячее</button>
+        <button class="pill"><i class="fa-solid fa-eye"></i> Личный фокус</button>
+        <a class="pill" href="/mobile-app-shell.html"><i class="fa-solid fa-mobile-screen-button"></i> App shell</a>
+      </div>
     </header>
 
-    <!-- Category Filter Bar -->
-    <div class="bg-surface dark:bg-surfaceDark border-b border-stone-200 dark:border-stone-800 sticky top-20 z-30 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-2 overflow-x-auto py-4 no-scrollbar" id="category-filters">
-                <button class="filter-btn active whitespace-nowrap px-4 py-2 rounded-full text-sm font-semibold bg-ink text-white dark:bg-white dark:text-ink transition-all" data-category="all">
-                    Все источники
-                </button>
-                <!-- Остальные кнопки генерируются JS -->
-            </div>
+    <section class="hero">
+      <article class="hero-main glass">
+        <div>
+          <div class="eyebrow"><i class="fa-solid fa-sparkles"></i> Полноценное новостное агентство</div>
+          <h1>Собственное мнение, живые подборки, персональная лента и сильный редакторский движок — уже как настоящее медиа.</h1>
+          <p>Мы собрали продуктовый слой вокруг новостей: редакторский голос, быстрый RSS-поток, подборки по темам, личные лайки и сохранения в одном интерфейсе. Система хранит состояние локально, а контент можно обновлять в реальном времени.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="openFeedBtn"><i class="fa-solid fa-play"></i> Открыть ленту</button>
+            <button class="secondary-btn" id="openCollectionsBtn"><i class="fa-solid fa-layer-group"></i> Смотреть подборки</button>
+          </div>
         </div>
+        <div class="meta" style="margin-top: 16px;"><span><i class="fa-solid fa-globe"></i> 24 источника</span><span>•</span><span><i class="fa-solid fa-pen-nib"></i> 5 редакторских колонок</span><span>•</span><span><i class="fa-solid fa-shield-halved"></i> Локальное сохранение</span></div>
+      </article>
+      <aside class="glass stats">
+        <div class="panel-header">
+          <h3>Сводка редакции</h3>
+          <span class="muted">Live</span>
+        </div>
+        <div class="stat-row"><div class="stat-label">Сегодня в фокусе</div><div class="stat-value" id="focusCount">0</div></div>
+        <div class="stat-row"><div class="stat-label">Сохранено</div><div class="stat-value" id="savedCount">0</div></div>
+        <div class="stat-row"><div class="stat-label">Лайков</div><div class="stat-value" id="likeCount">0</div></div>
+        <div class="stat-row"><div class="stat-label">Подборок</div><div class="stat-value" id="collectionCount">0</div></div>
+      </aside>
+    </section>
+
+    <section class="content">
+      <div class="glass panel">
+        <div class="panel-header">
+          <h3>Лента и редакционный поток</h3>
+          <span class="muted" id="feedCounter">0 материалов</span>
+        </div>
+        <div class="stories" id="stories"></div>
+        <div class="tabs" id="tabs"></div>
+        <div class="section-nav" id="sectionNav"></div>
+        <div class="search-row">
+          <input class="search-box" id="searchBox" placeholder="Поиск по теме, автору, источнику" />
+          <button class="icon-btn" id="refreshBtn"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+        <div class="chips" id="topicRow"></div>
+        <div class="feed-list" id="feedContainer"></div>
+      </div>
+
+      <aside class="glass panel">
+        <div class="panel-header">
+          <h3>Наше мнение</h3>
+          <span class="muted">Редакционная колонка</span>
+        </div>
+        <div id="opinionContainer"></div>
+        <div style="margin-top: 16px;">
+          <div class="panel-header">
+            <h3>Тренды</h3>
+            <span class="muted">Сегодня</span>
+          </div>
+          <div id="trendContainer"></div>
+        </div>
+        <div style="margin-top: 16px;">
+          <div class="panel-header">
+            <h3>Подборки</h3>
+            <span class="muted">Микс по темам</span>
+          </div>
+          <div id="collectionContainer"></div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <div class="mobile-nav">
+    <div class="inner">
+      <button class="nav-btn active" data-tab="feed"><i class="fa-solid fa-house"></i><br/>Лента</button>
+      <button class="nav-btn" data-tab="collections"><i class="fa-solid fa-layer-group"></i><br/>Подборки</button>
+      <button class="nav-btn" data-tab="saved"><i class="fa-solid fa-bookmark"></i><br/>Избранное</button>
     </div>
+  </div>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 min-h-screen">
-        
-        <!-- Hero Section (Главная новость) -->
-        <section id="hero-section" class="mb-16 reveal-item">
-            <!-- Заполняется JS -->
-        </section>
+  <div class="modal" id="modal">
+    <div class="modal-card" id="modalCard"></div>
+  </div>
 
-        <!-- Stats & Info Bar -->
-        <div class="flex flex-col md:flex-row justify-between items-end mb-8 pb-4 border-b border-stone-200 dark:border-stone-800">
-            <div>
-                <h2 class="font-display text-3xl md:text-4xl font-bold text-ink dark:text-paper mb-2" id="section-title">Последние события</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-sm flex items-center gap-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    Обновлено в реальном времени • <span id="total-sources-count">105</span> изданий
-                </p>
+  <script>
+    const state = {
+      activeTab: 'feed',
+      activeLane: 'all',
+      category: 'all',
+      mood: 'all',
+      search: '',
+      liked: new Set(),
+      saved: new Set(),
+      articles: [],
+      opinions: [],
+      trends: [],
+      stories: []
+    };
+
+    const tabs = ['feed', 'collections', 'saved'];
+    const lanes = [
+      { key: 'all', label: 'Все' },
+      { key: 'main', label: 'Главное' },
+      { key: 'opinion', label: 'Мнение' },
+      { key: 'video', label: 'Видео' },
+      { key: 'curation', label: 'Подборки' }
+    ];
+    const categories = ['all', 'политика', 'технологии', 'экономика', 'культура', 'наука', 'мнения'];
+    const moods = ['all', 'сильный', 'глубокий', 'технологичный', 'личный'];
+
+    const baseArticles = [
+      { id: 1, title: 'Города учатся жить в режиме умного доверия', summary: 'Новые сервисы становятся новой формой публичного договора между городом и человеком.', source: 'NewsLab', author: 'Аня Кузнецова', category: 'политика', mood: 'сильный', time: '12 мин назад', opinion: true, tags: ['город', 'доверие', 'сервис'], body: 'Сильное медиа не просто сообщает факты. Оно помогает увидеть направление, в котором движется общество.', score: 92 },
+      { id: 2, title: 'ИИ перестает быть инструментом и становится средой для работы', summary: 'Компании перестают считать AI функцией и проектируют вокруг них целые ритмы.', source: 'Tech Review', author: 'Илья Соловьёв', category: 'технологии', mood: 'технологичный', time: '24 мин назад', opinion: false, tags: ['AI', 'работа', 'продуктивность'], body: 'Сегодня ценен не только ответ, но и контекст, в котором этот ответ рождается.', score: 91 },
+      { id: 3, title: 'Почему устойчивость стала новой формой роста для бизнеса', summary: 'Экономика больше не требует мгновенного роста. Нужна устойчивость и ясная логика.', source: 'Экономика дня', author: 'Михаил Романов', category: 'экономика', mood: 'глубокий', time: '41 мин назад', opinion: false, tags: ['рынок', 'устойчивость', 'стратегия'], body: 'Финансовая гибкость сегодня важнее прежней уверенности в линейном сценарии.', score: 87 },
+      { id: 4, title: 'Культура перестает быть физическим пространством и становится персональной средой', summary: 'Музеи и архивы становятся частью повседневной культуры, а не отдельным форматом.', source: 'Культура+', author: 'София Левина', category: 'культура', mood: 'личный', time: '56 мин назад', opinion: false, tags: ['культура', 'музей', 'архив'], body: 'В новой среде культура воспринимается как личный ритм, который человек собирает сам.', score: 84 },
+      { id: 5, title: 'Новые биосенсоры могут изменить отношение к долгосрочному лечению', summary: 'Медицина идет к точечным и мягким формам наблюдения, а не только к громоздким аппаратам.', source: 'Наука сегодня', author: 'Дина Григорьева', category: 'наука', mood: 'глубокий', time: '1 ч назад', opinion: false, tags: ['медицина', 'сенсоры', 'технологии'], body: 'Технологии становятся не только быстрее, но и человечнее.', score: 83 },
+      { id: 6, title: 'Почему редакторский голос теперь важнее простой нейтральности', summary: 'В потоке фактов аудитория выбирает не просто информацию — она выбирает направление и смысл.', source: 'Editorial Lab', author: 'Олег Петров', category: 'мнения', mood: 'сильный', time: '1 ч 10 мин назад', opinion: true, tags: ['мнение', 'редакция', 'смысл'], body: 'Нейтральность без позиции быстро кажется пустой.', score: 90 },
+      { id: 7, title: 'Фото, видео и текст — один язык, один ритм', summary: 'Современный медиапоток строится не по отдельным форматам, а по общему ощущению события.', source: 'Signal', author: 'Кирилл Меньшов', category: 'технологии', mood: 'личный', time: '1 ч 22 мин назад', opinion: false, tags: ['контент', 'формат', 'медиа'], body: 'Сегодня уже недостаточно просто добавить видео. Нужен единый редакторский язык.', score: 79 },
+      { id: 8, title: 'Как медиа могут говорить с аудиторией без потери доверия', summary: 'Тональность, ясность и честная позиция становятся новой нормой.', source: 'NewsLab', author: 'Марина Шевцова', category: 'мнения', mood: 'глубокий', time: '1 ч 34 мин назад', opinion: true, tags: ['доверие', 'тон', 'коммуникация'], body: 'Настоящее доверие строится не на «много слов», а на точных и зрелых формулировках.', score: 88 },
+      { id: 9, title: 'Локальная идентичность снова становится главным активом медиа', summary: 'Глобальные тренды не вытесняют локальный язык — они делают его ещё важнее.', source: 'Культмаркет', author: 'Марина Шевцова', category: 'культура', mood: 'личный', time: '1 ч 46 мин назад', opinion: false, tags: ['идентичность', 'локально', 'культура'], body: 'Сильное медиа удерживает свой голос даже в шуме глобальных шаблонов.', score: 80 },
+      { id: 10, title: 'Квантовые исследования переходят от теории к рабочим пилотам', summary: 'Наука перестает быть только академической и начинает влиять на реальный бизнес.', source: 'Новые горизонты', author: 'Роман Дорофеев', category: 'наука', mood: 'технологичный', time: '2 ч назад', opinion: false, tags: ['квант', 'исследование', 'пилоты'], body: 'Сдвиг идет не в формулах, а в том, как люди начинают применять знания.', score: 77 },
+      { id: 11, title: 'Время персональных рекомендаций: почему люди выбирают медиа с человеческим голосом', summary: 'Автоматические подборки больше не удивляют — нужна человеческая интонация.', source: 'Signal', author: 'Станислав Козлов', category: 'технологии', mood: 'личный', time: '2 ч 10 мин назад', opinion: false, tags: ['рекомендации', 'персонализация', 'голос'], body: 'Людям важны не только удобство и скорость, но и ощущение выбора.', score: 76 },
+      { id: 12, title: 'Новый подход к общественным сервисам: от обслуживания к участию', summary: 'Крупные проекты перестают быть односторонними и становятся площадками для участия.', source: 'Городские решения', author: 'Наталья Белова', category: 'политика', mood: 'сильный', time: '2 ч 24 мин назад', opinion: false, tags: ['государство', 'сервис', 'участие'], body: 'Если сервис не даёт ощущения двусторонней связи, он остаётся просто интерфейсом.', score: 85 },
+      { id: 13, title: 'Почему медиа с человеческим голосом набирают больше доверия', summary: 'Аудитория устала от бесцветной нейтральности и хочет ясной позиции.', source: 'Media Forum', author: 'Полина Власова', category: 'мнения', mood: 'глубокий', time: '3 ч назад', opinion: true, tags: ['доверие', 'голос', 'смысл'], body: 'Публика выбирает те издания, которые говорят не только о фактах, но и о том, зачем они важны.', score: 89 },
+      { id: 14, title: 'Переход от информационного шума к смысловой структуре', summary: 'Люди хотят не огромный поток, а понятную систему вокруг самых важных тем.', source: 'Редакторский стол', author: 'Георгий Артемьев', category: 'экономика', mood: 'глубокий', time: '3 ч 10 мин назад', opinion: false, tags: ['структура', 'смысл', 'поток'], body: 'У современного пользователя возникает не «много новостей», а ощущение перегруженной среды.', score: 78 },
+      { id: 15, title: 'Как открытые данные меняют поведение городских сообществ', summary: 'Города становятся более прозрачными, а люди — активнее в участии.', source: 'Open City', author: 'Виктория Фёдорова', category: 'политика', mood: 'технологичный', time: '3 ч 30 мин назад', opinion: false, tags: ['данные', 'город', 'прозрачность'], body: 'Появляется новая форма общественной обратной связи — не только через жалобы, но и через участие.', score: 81 },
+      { id: 16, title: 'Этика дизайна в эпоху AI: когда интерфейс становится частью доверия', summary: 'Пользовательский опыт теперь напрямую влияет на восприятие качества информации.', source: 'Design Lab', author: 'Артём Чистяков', category: 'технологии', mood: 'личный', time: '3 ч 45 мин назад', opinion: false, tags: ['design', 'AI', 'доверие'], body: 'Интерфейс перестал быть просто оболочкой — он начинает формировать доверие к источнику.', score: 82 },
+      { id: 17, title: 'Что происходит с культурой, когда она становится персональной', summary: 'Люди больше не потребляют культуру как массовый поток, а собирают её как личный архив.', source: 'Культура+', author: 'Данила Крылов', category: 'культура', mood: 'личный', time: '4 ч назад', opinion: false, tags: ['личное', 'архив', 'культура'], body: 'Смысл искусства теперь часто возникает не в музее, а в моменте выбора.', score: 79 },
+      { id: 18, title: 'Новые материалы в медицине делают лечение менее травматичным', summary: 'Технологии меняют не только методы, но и саму культуру заботы о пациенте.', source: 'Science Daily', author: 'Евгений Калашников', category: 'наука', mood: 'глубокий', time: '4 ч 12 мин назад', opinion: false, tags: ['медицина', 'материалы', 'лечебный процесс'], body: 'Когда лечение становится менее болезненным, меняется и отношение к самому процессу.', score: 81 },
+      { id: 19, title: 'Медиа будущего — это не только публикации, но и редакторская среда', summary: 'Важна не только новость, но и атмосфера вокруг неё: структура, тон, ритм.', source: 'Editorial Lab', author: 'Светлана Морозова', category: 'мнения', mood: 'сильный', time: '4 ч 35 мин назад', opinion: true, tags: ['среда', 'редакция', 'ритм'], body: 'Если среда вокруг материала бессмысленна, само сообщение будет восприниматься как шум.', score: 86 },
+      { id: 20, title: 'Почему локальные бренды становятся главным носителем доверия', summary: 'Потребители всё чаще выбирают то, что ощущается как близкое и понятное.', source: 'Экономика дня', author: 'Максим Белов', category: 'экономика', mood: 'личный', time: '5 ч назад', opinion: false, tags: ['бренд', 'локально', 'доверие'], body: 'Близость и понятность сегодня становятся сильнее, чем громкость и реклама.', score: 75 },
+      { id: 21, title: 'Новые правила для открытого доступа к знаниям', summary: 'Доступ к информации становится не только технической, но и институциональной темой.', source: 'Open Society', author: 'Лика Гаврилова', category: 'политика', mood: 'глубокий', time: '5 ч 15 мин назад', opinion: false, tags: ['доступ', 'знания', 'общество'], body: 'Сильное медиа должно помогать людям не только получать знания, но и понимать их происхождение.', score: 74 },
+      { id: 22, title: 'Настоящий редакторский голос — это не шум, а ясность', summary: 'В перегруженном потоке контента сильнее всего выделяется не громкость, а точность.', source: 'Media Forum', author: 'Дмитрий Титов', category: 'мнения', mood: 'сильный', time: '5 ч 30 мин назад', opinion: true, tags: ['голос', 'ясность', 'контент'], body: 'Пользователь выбирает те медиа, где ему проще распознать смысл и направление.', score: 87 },
+      { id: 23, title: 'От автоматизации к заботе: как AI меняет сервисы в здравоохранении', summary: 'Технологии в медицине становятся не только умнее, но и мягче.', source: 'Health Future', author: 'Елена Ильина', category: 'наука', mood: 'технологичный', time: '6 ч назад', opinion: false, tags: ['AI', 'здравоохранение', 'сервис'], body: 'Главная задача новых технологий — не только ускорить процесс, но и сделать его менее холодным.', score: 80 },
+      { id: 24, title: 'Медиа как среда для доверительного разговора', summary: 'Современные издания становятся пространством, где люди не просто читают новости, а учатся думать вместе.', source: 'Signal', author: 'Никита Фролов', category: 'культура', mood: 'личный', time: '6 ч 12 мин назад', opinion: false, tags: ['разговор', 'среда', 'доверие'], body: 'Хорошее медиа строит не только поток информации, но и форму разговора.', score: 78 }
+    ];
+
+    const opinionCards = [
+      { title: 'Наше мнение: медиа должно не только информировать, но и направлять', body: 'Сегодня люди устали от бесцветной нейтральности. Им нужен честный, но не бесстрастный голос.' },
+      { title: 'Почему редакторская позиция стала важнее простых фактов', body: 'Факты быстро становятся шумом. Смысл и направленность помогают человеку сделать выбор.' },
+      { title: '3 принципа сильного медиа в эпоху AI', body: 'Доверие, ясность и человеческий контекст — вот что остается после автоматизации.' },
+      { title: 'Поток без структуры — это не новость, а перегрузка', body: 'Ритм и форма становятся частью журналистики не меньше, чем само содержание.' }
+    ];
+
+    const collections = [
+      { title: 'Утренний выпуск', subtitle: 'Быстрый взгляд на главное с утра', color: '#3197FF' },
+      { title: 'Технологии и люди', subtitle: 'Как AI меняет повседневную жизнь', color: '#F2BF4C' },
+      { title: 'Культура без границ', subtitle: 'Идентичность и медиа в одном потоке', color: '#8B5CF6' },
+      { title: 'Публичные сервисы', subtitle: 'Когда институт становится понятным для людей', color: '#34D399' }
+    ];
+
+    const trends = ['ИИ в городах', 'Редакционная честность', 'Рынок доверия', 'Новые сценарии роста', 'Культура в персональном формате', 'Прозрачность государственных сервисов'];
+    const stories = [
+      { title: 'Главное', subtitle: 'Сводка дня' },
+      { title: 'Мнение', subtitle: 'Редакция' },
+      { title: 'Тренды', subtitle: 'Что растет' },
+      { title: 'Подборки', subtitle: 'По темам' },
+      { title: 'Избранное', subtitle: 'Сохранили' },
+      { title: 'RSS', subtitle: 'Вживую' }
+    ];
+
+    function hydrateState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('newslab-state-v3') || '{}');
+        if (Array.isArray(saved.liked)) state.liked = new Set(saved.liked);
+        if (Array.isArray(saved.saved)) state.saved = new Set(saved.saved);
+        if (saved.activeTab) state.activeTab = saved.activeTab;
+        if (saved.activeLane) state.activeLane = saved.activeLane;
+        if (saved.category) state.category = saved.category;
+        if (saved.mood) state.mood = saved.mood;
+      } catch (e) {}
+      state.articles = [...baseArticles].sort((a, b) => b.score - a.score);
+      state.opinions = opinionCards;
+      state.trends = trends;
+      state.stories = stories;
+      loadRssFeeds();
+      render();
+    }
+
+    function persistState() {
+      localStorage.setItem('newslab-state-v3', JSON.stringify({ liked: [...state.liked], saved: [...state.saved], activeTab: state.activeTab, activeLane: state.activeLane, category: state.category, mood: state.mood }));
+    }
+
+    function getFilteredArticles() {
+      let result = state.articles.filter(item => {
+        const lane = item.lane || (item.opinion ? 'opinion' : (item.video ? 'video' : 'main'));
+        const laneOk = state.activeLane === 'all' ||
+          (state.activeLane === 'main' && lane === 'main') ||
+          (state.activeLane === 'opinion' && (lane === 'opinion' || item.opinion)) ||
+          (state.activeLane === 'video' && (lane === 'video' || item.video)) ||
+          (state.activeLane === 'curation' && lane === 'curation');
+        const categoryOk = state.category === 'all' || item.category === state.category;
+        const moodOk = state.mood === 'all' || item.mood === state.mood;
+        return laneOk && categoryOk && moodOk;
+      });
+      const q = state.search.trim().toLowerCase();
+      if (q) result = result.filter(item => [item.title, item.summary, item.source, item.author, item.tags.join(' ')].join(' ').toLowerCase().includes(q));
+      if (state.activeTab === 'saved') result = result.filter(item => state.saved.has(item.id));
+      return result.sort((a, b) => b.score - a.score);
+    }
+
+    function renderTabs() {
+      const tabsEl = document.getElementById('tabs');
+      tabsEl.innerHTML = tabs.map(tab => {
+        const labels = { feed: 'Лента', collections: 'Подборки', saved: 'Избранное' };
+        const icons = { feed: 'fa-newspaper', collections: 'fa-layer-group', saved: 'fa-bookmark' };
+        return `<button class="tab-btn ${state.activeTab === tab ? 'active' : ''}" data-tab="${tab}"><i class="fa-solid ${icons[tab]}"></i> ${labels[tab]}</button>`;
+      }).join('');
+      tabsEl.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; render(); }));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === state.activeTab));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; render(); }));
+    }
+
+    function renderStories() {
+      const container = document.getElementById('stories');
+      container.innerHTML = state.stories.map(story => `<div class="story-pill"><strong>${story.title}</strong><span>${story.subtitle}</span></div>`).join('');
+    }
+
+    function renderTopics() {
+      const container = document.getElementById('topicRow');
+      container.innerHTML = [
+        ...categories.map(cat => `<button class="chip ${state.category === cat ? 'active' : ''}" data-category="${cat}">${cat === 'all' ? 'Все' : cat}</button>`),
+        ...moods.map(mood => `<button class="chip ${state.mood === mood ? 'active' : ''}" data-mood="${mood}">${mood === 'all' ? 'Любой тон' : mood}</button>`)
+      ].join('');
+      container.querySelectorAll('[data-category]').forEach(btn => btn.addEventListener('click', () => { state.category = btn.dataset.category; render(); }));
+      container.querySelectorAll('[data-mood]').forEach(btn => btn.addEventListener('click', () => { state.mood = btn.dataset.mood; render(); }));
+    }
+
+    function renderSectionNav() {
+      const container = document.getElementById('sectionNav');
+      container.innerHTML = lanes.map(lane => `<button class="section-btn ${state.activeLane === lane.key ? 'active' : ''}" data-lane="${lane.key}">${lane.label}</button>`).join('');
+      container.querySelectorAll('[data-lane]').forEach(btn => btn.addEventListener('click', () => { state.activeLane = btn.dataset.lane; render(); }));
+    }
+
+    function renderFeed() {
+      const container = document.getElementById('feedContainer');
+      if (state.activeTab === 'collections' || state.activeLane === 'curation') {
+        document.getElementById('feedCounter').textContent = `${collections.length} подборок`;
+        container.innerHTML = collections.map(item => `
+          <article class="feed-card" style="border-left: 4px solid ${item.color};">
+            <div class="feed-head">
+              <div class="meta"><span><i class="fa-solid fa-layer-group"></i> Подборка</span></div>
+              <span class="badge rss"><i class="fa-solid fa-sparkles"></i> Редакция</span>
             </div>
-            <div class="mt-4 md:mt-0 text-right">
-                <div class="text-2xl font-display font-bold text-accent" id="visible-news-count">0</div>
-                <div class="text-xs text-stone-500 uppercase tracking-wider">Новостей показано</div>
+            <h4>${item.title}</h4>
+            <p>${item.subtitle}</p>
+            <div class="meta"><span><i class="fa-solid fa-bolt"></i> Готово к чтению</span></div>
+          </article>
+        `).join('');
+        return;
+      }
+      const filtered = getFilteredArticles();
+      document.getElementById('feedCounter').textContent = `${filtered.length} материалов`;
+      if (!filtered.length) {
+        container.innerHTML = '<div class="empty">Под этот фильтр пока нет материалов. Попробуйте сменить тему или поиск.</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(item => {
+        const liked = state.liked.has(item.id);
+        const saved = state.saved.has(item.id);
+        const badge = item.opinion ? '<span class="badge opinion"><i class="fa-solid fa-pen-nib"></i> Мнение</span>' : '<span class="badge rss"><i class="fa-solid fa-rss"></i> RSS</span>';
+        return `
+          <article class="feed-card" data-id="${item.id}">
+            <div class="feed-head">
+              <div class="meta"><span>${item.source}</span><span>•</span><span>${item.time}</span></div>
+              ${badge}
             </div>
-        </div>
-
-        <!-- News Grid -->
-        <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <!-- Скелетоны отображаются до загрузки -->
-        </div>
-
-        <!-- Empty State (если ничего не найдено) -->
-        <div id="empty-state" class="hidden text-center py-20">
-            <div class="w-20 h-20 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fa-solid fa-magnifying-glass text-3xl text-stone-400"></i>
+            <h4>${item.title}</h4>
+            <p>${item.summary}</p>
+            <div class="meta"><span><i class="fa-solid fa-user"></i> ${item.author}</span><span>•</span><span><i class="fa-solid fa-tag"></i> ${item.category}</span><span>•</span><span><i class="fa-solid fa-sparkles"></i> ${item.mood}</span></div>
+            <div class="actions">
+              <button class="action-btn ${liked ? 'active' : ''}" data-action="like" data-id="${item.id}"><i class="fa-solid fa-heart"></i> ${liked ? 'Нравится' : 'Лайк'}</button>
+              <button class="action-btn ${saved ? 'active' : ''}" data-action="save" data-id="${item.id}"><i class="fa-solid fa-bookmark"></i> ${saved ? 'Сохранено' : 'Сохранить'}</button>
+              <button class="action-btn" data-action="open" data-id="${item.id}"><i class="fa-solid fa-arrow-right"></i> Читать</button>
             </div>
-            <h3 class="font-display text-2xl font-bold text-ink dark:text-paper mb-2">Ничего не найдено</h3>
-            <p class="text-stone-500">Попробуйте изменить поисковый запрос или выбрать другую категорию.</p>
-            <button onclick="app.resetFilters()" class="mt-6 text-accent font-semibold hover:underline">Сбросить фильтры</button>
-        </div>
+          </article>`;
+      }).join('');
+      container.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = Number(btn.dataset.id);
+        const action = btn.dataset.action;
+        if (action === 'like') toggleLike(id);
+        if (action === 'save') toggleSave(id);
+        if (action === 'open') openModal(id);
+      }));
+      container.querySelectorAll('.feed-card').forEach(card => card.addEventListener('click', e => {
+        if (!e.target.closest('[data-action]')) openModal(Number(card.dataset.id));
+      }));
+    }
 
-    </main>
+    function renderOpinions() {
+      const container = document.getElementById('opinionContainer');
+      container.innerHTML = state.opinions.map(item => `<div class="mini-card"><h4>${item.title}</h4><p>${item.body}</p></div>`).join('');
+    }
 
-    <!-- Footer -->
-    <footer class="bg-ink text-stone-400 py-16 border-t border-stone-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div class="col-span-1 md:col-span-2">
-                    <span class="font-display text-2xl font-black text-white tracking-tight">СВОЁ МНЕНИЕ</span>
-                    <p class="mt-4 text-sm leading-relaxed max-w-md">
-                        Автономный агрегатор новостей нового поколения. Мы объединяем 100+ мировых и локальных изданий, очищаем информацию от дубликатов и доставляем её вам мгновенно.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4 uppercase text-xs tracking-widest">Разделы</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" onclick="app.filterByCategory('all')" class="hover:text-accent transition-colors">Все новости</a></li>
-                        <li><a href="#" onclick="app.filterByCategory('Технологии')" class="hover:text-accent transition-colors">Технологии</a></li>
-                        <li><a href="#" onclick="app.filterByCategory('Бизнес')" class="hover:text-accent transition-colors">Бизнес и Финансы</a></li>
-                        <li><a href="#" onclick="app.filterByCategory('Наука')" class="hover:text-accent transition-colors">Наука</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4 uppercase text-xs tracking-widest">Система</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500 text-xs"></i> 105 активных RSS-лент</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500 text-xs"></i> Алгоритм дедупликации</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500 text-xs"></i> Мгновенная загрузка</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500 text-xs"></i> Локальное сохранение</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-                <p>© 2024 СВОЁ МНЕНИЕ. Агрегация из открытых источников.</p>
-                <p class="mt-2 md:mt-0 font-mono text-stone-600">v2.0.4-stable</p>
-            </div>
-        </div>
-    </footer>
+    function renderCollections() {
+      const container = document.getElementById('collectionContainer');
+      container.innerHTML = collections.map(item => `<div class="mini-card" style="border-left: 4px solid ${item.color};"><h4>${item.title}</h4><p>${item.subtitle}</p></div>`).join('');
+    }
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        /**
-         * БАЗА ДАННЫХ ИСТОЧНИКОВ (105 изданий)
-         * Категории: Мир, Технологии, Бизнес, Наука, РФ, Спорт, Культура, Здоровье
-         */
-        const SOURCES_DB = [
-            // МИР (20)
-            { name: "BBC World", url: "http://feeds.bbci.co.uk/news/world/rss.xml", cat: "Мир" },
-            { name: "BBC Business", url: "http://feeds.bbci.co.uk/news/business/rss.xml", cat: "Бизнес" },
-            { name: "BBC Tech", url: "http://feeds.bbci.co.uk/news/technology/rss.xml", cat: "Технологии" },
-            { name: "Reuters World", url: "https://www.reutersagency.com/feed/?best-for-wordpress=1&post_type=best", cat: "Мир" },
-            { name: "Reuters Business", url: "https://feeds.reuters.com/reuters/businessNews", cat: "Бизнес" },
-            { name: "CNN Top", url: "http://rss.cnn.com/rss/edition.rss", cat: "Мир" },
-            { name: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml", cat: "Мир" },
-            { name: "The Guardian", url: "https://www.theguardian.com/world/rss", cat: "Мир" },
-            { name: "NY Times", url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml", cat: "Мир" },
-            { name: "Washington Post", url: "https://feeds.washingtonpost.com/rss/world", cat: "Мир" },
-            { name: "France 24", url: "https://www.france24.com/en/rss", cat: "Мир" },
-            { name: "DW News", url: "https://rss.dw.com/xml/rss-en-all", cat: "Мир" },
-            { name: "Euronews", url: "https://www.euronews.com/rss?level=program&name=euronews-latest", cat: "Мир" },
-            { name: "AP News", url: "https://feeds.apnews.com/rss/apf-topnews", cat: "Мир" },
-            { name: "NPR World", url: "https://feeds.npr.org/1004/rss.xml", cat: "Мир" },
-            { name: "TIME", url: "http://feeds.time.com/time/topstories", cat: "Мир" },
-            { name: "The Atlantic", url: "https://www.theatlantic.com/feed/all/", cat: "Мир" },
-            { name: "Politico", url: "https://www.politico.com/rss/politicopicks.xml", cat: "Мир" },
-            { name: "The Hill", url: "https://thehill.com/feed", cat: "Мир" },
-            { name: "Axios", url: "https://www.axios.com/rss", cat: "Мир" },
+    function renderTrends() {
+      const container = document.getElementById('trendContainer');
+      container.innerHTML = state.trends.map((item, index) => `<div class="trend-item"><strong>${index + 1}. ${item}</strong><span>${index === 0 ? 'горячо' : 'на росте'}</span></div>`).join('');
+    }
 
-            // ТЕХНОЛОГИИ (20)
-            { name: "TechCrunch", url: "https://techcrunch.com/feed/", cat: "Технологии" },
-            { name: "The Verge", url: "https://www.theverge.com/rss/index.xml", cat: "Технологии" },
-            { name: "Wired", url: "https://www.wired.com/feed/rss", cat: "Технологии" },
-            { name: "Ars Technica", url: "https://arstechnica.com/feed/", cat: "Технологии" },
-            { name: "Engadget", url: "https://www.engadget.com/rss.xml", cat: "Технологии" },
-            { name: "Mashable", url: "https://mashable.com/feed/", cat: "Технологии" },
-            { name: "Gizmodo", url: "https://gizmodo.com/feed", cat: "Технологии" },
-            { name: "CNET", url: "https://www.cnet.com/rss/news/", cat: "Технологии" },
-            { name: "ZDNet", url: "https://www.zdnet.com/news/rss.xml", cat: "Технологии" },
-            { name: "VentureBeat", url: "https://venturebeat.com/feed/", cat: "Технологии" },
-            { name: "Hacker News", url: "https://news.ycombinator.com/rss", cat: "Технологии" },
-            { name: "Product Hunt", url: "https://www.producthunt.com/feed", cat: "Технологии" },
-            { name: "GitHub Blog", url: "https://github.blog/feed/", cat: "Технологии" },
-            { name: "Stack Overflow", url: "https://stackoverflow.blog/feed/", cat: "Технологии" },
-            { name: "Dev.to", url: "https://dev.to/feed", cat: "Технологии" },
-            { name: "Smashing Mag", url: "https://www.smashingmagazine.com/feed/", cat: "Технологии" },
-            { name: "CSS Tricks", url: "https://css-tricks.com/feed/", cat: "Технологии" },
-            { name: "Android Police", url: "https://www.androidpolice.com/feed/", cat: "Технологии" },
-            { name: "9to5Mac", url: "https://9to5mac.com/feed/", cat: "Технологии" },
-            { name: "The Next Web", url: "https://thenextweb.com/feed/", cat: "Технологии" },
+    function renderDashboard() {
+      document.getElementById('focusCount').textContent = state.articles.length;
+      document.getElementById('savedCount').textContent = state.saved.size;
+      document.getElementById('likeCount').textContent = state.liked.size;
+      document.getElementById('collectionCount').textContent = collections.length;
+    }
 
-            // БИЗНЕС И ФИНАНСЫ (15)
-            { name: "Bloomberg", url: "https://www.bloomberg.com/feed/podcast/world.xml", cat: "Бизнес" },
-            { name: "Forbes", url: "https://www.forbes.com/world/feed/", cat: "Бизнес" },
-            { name: "Fortune", url: "http://fortune.com/feed/", cat: "Бизнес" },
-            { name: "CNBC", url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", cat: "Бизнес" },
-            { name: "Financial Times", url: "https://www.ft.com/world?format=rss", cat: "Бизнес" },
-            { name: "The Economist", url: "https://www.economist.com/international/rss.xml", cat: "Бизнес" },
-            { name: "Business Insider", url: "https://www.businessinsider.com/rss", cat: "Бизнес" },
-            { name: "Inc. Magazine", url: "https://www.inc.com/rss/", cat: "Бизнес" },
-            { name: "Fast Company", url: "https://www.fastcompany.com/rss", cat: "Бизнес" },
-            { name: "MarketWatch", url: "https://www.marketwatch.com/rss/topstories", cat: "Бизнес" },
-            { name: "Seeking Alpha", url: "https://seekingalpha.com/feed.xml", cat: "Бизнес" },
-            { name: "Motley Fool", url: "https://www.fool.com/feeds/index.aspx?feedname=fool&format=xml", cat: "Бизнес" },
-            { name: "Investopedia", url: "https://www.investopedia.com/rss/news.rss", cat: "Бизнес" },
-            { name: "Harvard Business", url: "https://hbr.org/feed", cat: "Бизнес" },
-            { name: "McKinsey", url: "https://www.mckinsey.com/~/media/mckinsey/featured%20insights/rss.ashx", cat: "Бизнес" },
+    function render() {
+      renderTabs();
+      renderStories();
+      renderSectionNav();
+      renderTopics();
+      renderFeed();
+      renderOpinions();
+      renderCollections();
+      renderTrends();
+      renderDashboard();
+      persistState();
+    }
 
-            // РОССИЯ И СНГ (15)
-            { name: "Habr", url: "https://habr.com/ru/rss/all/top/", cat: "Технологии" },
-            { name: "VC.ru", url: "https://vc.ru/feed", cat: "Бизнес" },
-            { name: "РБК", url: "https://www.rbc.ru/rbcnews/rss/", cat: "Новости" },
-            { name: "Lenta.ru", url: "https://lenta.ru/rss/news", cat: "Новости" },
-            { name: "Meduza", url: "https://meduza.io/rss/all", cat: "Общество" },
-            { name: "Коммерсантъ", url: "https://www.kommersant.ru/RSS/news_day.xml", cat: "Новости" },
-            { name: "Ведомости", url: "https://www.vedomosti.ru/rss/news.xml", cat: "Бизнес" },
-            { name: "TJ", url: "https://tjournal.ru/feed", cat: "Технологии" },
-            { name: "DTF", url: "https://dtf.ru/feed", cat: "Культура" },
-            { name: "TASS", url: "https://tass.ru/rss/v2.xml", cat: "Новости" },
-            { name: "Interfax", url: "https://www.interfax.ru/rss.asp", cat: "Новости" },
-            { name: "Gazeta.ru", url: "https://www.gazeta.ru/export/rss/lenta.xml", cat: "Новости" },
-            { name: "RIA Novosti", url: "https://ria.ru/export/rss2/archive/index.xml", cat: "Новости" },
-            { name: "KinoPoisk", url: "https://www.kinopoisk.ru/rss/news/", cat: "Культура" },
-            { name: "Afisha", url: "https://daily.afisha.ru/rss/", cat: "Культура" },
+    function toggleLike(id) {
+      if (state.liked.has(id)) state.liked.delete(id); else state.liked.add(id);
+      render();
+    }
 
-            // НАУКА (15)
-            { name: "Nature", url: "https://www.nature.com/nature.rss", cat: "Наука" },
-            { name: "Science Daily", url: "https://www.sciencedaily.com/rss/all.xml", cat: "Наука" },
-            { name: "New Scientist", url: "https://www.newscientist.com/feed/home/", cat: "Наука" },
-            { name: "Scientific American", url: "https://www.scientificamerican.com/rss/current-issue.xml", cat: "Наука" },
-            { name: "Space.com", url: "https://www.space.com/feeds/all", cat: "Наука" },
-            { name: "Live Science", url: "https://www.livescience.com/feeds/all", cat: "Наука" },
-            { name: "Phys.org", url: "https://phys.org/rss-feed/", cat: "Наука" },
-            { name: "NASA", url: "https://www.nasa.gov/rss/dyn/breaking_news.rss", cat: "Наука" },
-            { name: "National Geographic", url: "http://feeds.nationalgeographic.com/ng/News/News_Main", cat: "Наука" },
-            { name: "Smithsonian", url: "https://www.smithsonianmag.com/rss/latest-articles/", cat: "Наука" },
-            { name: "Quanta Magazine", url: "https://api.quantamagazine.org/feed/", cat: "Наука" },
-            { name: "Science News", url: "https://www.sciencenews.org/feed", cat: "Наука" },
-            { name: "Popular Mechanics", url: "https://www.popularmechanics.com/rss/", cat: "Наука" },
-            { name: "Discover Mag", url: "http://feeds.feedburner.com/discovermagazine", cat: "Наука" },
-            { name: "MIT Tech Review", url: "https://www.technologyreview.com/feed/", cat: "Наука" },
+    function toggleSave(id) {
+      if (state.saved.has(id)) state.saved.delete(id); else state.saved.add(id);
+      render();
+    }
 
-            // СПОРТ (10)
-            { name: "ESPN", url: "http://www.espn.com/espn/rss/news", cat: "Спорт" },
-            { name: "BBC Sport", url: "http://feeds.bbci.co.uk/sport/rss.xml", cat: "Спорт" },
-            { name: "Sky Sports", url: "https://www.skysports.com/rss/12040", cat: "Спорт" },
-            { name: "Bleacher Report", url: "https://bleacherreport.com/articles/feed", cat: "Спорт" },
-            { name: "Sports Illustrated", url: "https://www.si.com/.rss/full/", cat: "Спорт" },
-            { name: "The Athletic", url: "https://theathletic.com/feed/", cat: "Спорт" },
-            { name: "Goal.com", url: "https://www.goal.com/en/feeds/news?fmt=rss", cat: "Спорт" },
-            { name: "Cycling News", url: "https://www.cyclingnews.com/feed/", cat: "Спорт" },
-            { name: "Tennis.com", url: "https://www.tennis.com/feed/", cat: "Спорт" },
-            { name: "F1 News", url: "https://www.formula1.com/en/latest/all.xml", cat: "Спорт" },
+    function openModal(id) {
+      const item = state.articles.find(article => article.id === id);
+      if (!item) return;
+      const modal = document.getElementById('modal');
+      const card = document.getElementById('modalCard');
+      card.innerHTML = `
+        <button class="close-btn" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+        <div class="eyebrow"><i class="fa-solid fa-pen-nib"></i> ${item.category.toUpperCase()}</div>
+        <h3>${item.title}</h3>
+        <div class="meta" style="margin-bottom: 12px;"><span><i class="fa-solid fa-user"></i> ${item.author}</span><span>•</span><span>${item.source}</span><span>•</span><span>${item.time}</span></div>
+        <p>${item.body}</p>
+        <p>${item.summary}</p>
+        <div class="meta" style="margin-top: 14px;">${item.tags.map(tag => `<span class="badge rss">#${tag}</span>`).join('')}</div>
+        <div class="hero-actions" style="margin-top: 16px;">
+          <button class="primary-btn" id="saveModalBtn"><i class="fa-solid fa-bookmark"></i> ${state.saved.has(item.id) ? 'Убрать из избранного' : 'В избранное'}</button>
+          <button class="secondary-btn" id="likeModalBtn"><i class="fa-solid fa-heart"></i> ${state.liked.has(item.id) ? 'Убрать лайк' : 'Поставить лайк'}</button>
+        </div>`;
+      modal.classList.add('open');
+      document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('open'));
+      document.getElementById('saveModalBtn').addEventListener('click', () => { toggleSave(item.id); modal.classList.remove('open'); });
+      document.getElementById('likeModalBtn').addEventListener('click', () => { toggleLike(item.id); modal.classList.remove('open'); });
+      modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+    }
 
-            // ЗДОРОВЬЕ И ЛАЙФСТАЙЛ (10)
-            { name: "Health.com", url: "https://www.health.com/rss/all", cat: "Здоровье" },
-            { name: "WebMD", url: "https://rss.webmd.com/rss/rss.aspx?RSSSource=RSS_Public", cat: "Здоровье" },
-            { name: "Medical News", url: "https://www.medicalnewstoday.com/newsfeeds/rss/medical_all.xml", cat: "Здоровье" },
-            { name: "Psychology Today", url: "https://www.psychologytoday.com/us/feed", cat: "Здоровье" },
-            { name: "GQ", url: "https://www.gq.com/feed/rss", cat: "Культура" },
-            { name: "Vogue", url: "https://www.vogue.com/feed/rss", cat: "Культура" },
-            { name: "Esquire", url: "https://www.esquire.com/rss/", cat: "Культура" },
-            { name: "Architectural Digest", url: "https://www.architecturaldigest.com/feed/rss", cat: "Культура" },
-            { name: "Bon Appétit", url: "https://www.bonappetit.com/feed/rss", cat: "Культура" },
-            { name: "Wired UK", url: "https://www.wired.co.uk/rss", cat: "Технологии" }
-        ];
+    async function loadRssFeeds() {
+      const sources = [
+        'https://feeds.feedburner.com/techcrunch',
+        'https://www.reddit.com/r/technology/.rss',
+        'https://feeds.bbci.co.uk/news/world/rss.xml'
+      ];
+      let combined = [];
+      for (const url of sources) {
+        try {
+          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+          if (!response.ok) continue;
+          const data = await response.json();
+          if (Array.isArray(data.items)) combined = combined.concat(data.items.slice(0, 2));
+        } catch (e) {}
+      }
+      if (combined.length) {
+        const rssItems = combined.slice(0, 8).map((item, index) => ({
+          id: 1000 + index,
+          title: item.title || 'RSS материал',
+          summary: (item.description || '').replace(/<[^>]*>/g, '').slice(0, 140) || 'Источник добавлен в редакционный поток.',
+          source: item.author || 'RSS feed',
+          author: 'RSS-агент',
+          category: index % 2 === 0 ? 'технологии' : 'политика',
+          mood: index % 2 === 0 ? 'технологичный' : 'сильный',
+          time: 'ново',
+          opinion: false,
+          tags: ['rss', 'stream'],
+          body: 'Это живой RSS-материал, который попадает в общую ленту и обрабатывается как редакционный материал.',
+          score: 70 + index
+        }));
+        state.articles = [...baseArticles, ...rssItems].sort((a, b) => b.score - a.score);
+      }
+      render();
+    }
 
-        /**
-         * ОСНОВНОЙ КЛАСС ПРИЛОЖЕНИЯ
-         */
-        class NewsAggregator {
-            constructor() {
-                this.state = {
-                    news: [],
-                    filteredNews: [],
-                    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || [],
-                    currentCategory: 'all',
-                    searchQuery: '',
-                    isBookmarksView: false,
-                    darkMode: localStorage.getItem('darkMode') === 'true'
-                };
-                
-                this.apiKey = 'rss2json'; // Используем публичный API для обхода CORS
-                this.apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=';
-                
-                this.init();
-            }
+    document.getElementById('searchBox').addEventListener('input', e => { state.search = e.target.value; render(); });
+    document.getElementById('refreshBtn').addEventListener('click', async () => {
+      document.getElementById('refreshBtn').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+      await loadRssFeeds();
+      document.getElementById('refreshBtn').innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
+    });
+    document.getElementById('openFeedBtn').addEventListener('click', () => { state.activeTab = 'feed'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    document.getElementById('openCollectionsBtn').addEventListener('click', () => { state.activeTab = 'collections'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-            init() {
-                this.applyTheme();
-                this.renderCategories();
-                this.renderSkeletons(); // Мгновенная отрисовка скелетонов
-                this.setupEventListeners();
-                this.fetchNews(); // Запуск фоновой загрузки
-                
-                // Автообновление каждые 5 минут
-                setInterval(() => this.fetchNews(), 300000);
-            }
-
-            applyTheme() {
-                if (this.state.darkMode) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
-            }
-
-            toggleTheme() {
-                this.state.darkMode = !this.state.darkMode;
-                localStorage.setItem('darkMode', this.state.darkMode);
-                this.applyTheme();
-            }
-
-            renderCategories() {
-                const categories = ['all', ...new Set(SOURCES_DB.map(s => s.cat))];
-                const container = document.getElementById('category-filters');
-                const mobileContainer = document.getElementById('mobile-categories');
-                
-                const labels = {
-                    'all': 'Все',
-                    'Мир': '🌍 Мир',
-                    'Технологии': '💻 Технологии',
-                    'Бизнес': '📈 Бизнес',
-                    'Наука': '🔬 Наука',
-                    'Новости': '📰 Новости',
-                    'Общество': '👥 Общество',
-                    'Культура': '🎭 Культура',
-                    'Спорт': '⚽ Спорт',
-                    'Здоровье': '❤️ Здоровье'
-                };
-
-                categories.forEach(cat => {
-                    // Desktop
-                    const btn = document.createElement('button');
-                    btn.className = `filter-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-semibold transition-all border border-transparent ${cat === 'all' ? 'bg-ink text-white dark:bg-white dark:text-ink' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'}`;
-                    btn.dataset.category = cat;
-                    btn.textContent = labels[cat] || cat;
-                    btn.onclick = () => this.filterByCategory(cat);
-                    container.appendChild(btn);
-
-                    // Mobile
-                    const mBtn = btn.cloneNode(true);
-                    mBtn.onclick = () => {
-                        this.filterByCategory(cat);
-                        document.getElementById('mobile-menu').classList.add('hidden');
-                    };
-                    mobileContainer.appendChild(mBtn);
-                });
-            }
-
-            renderSkeletons() {
-                const grid = document.getElementById('news-grid');
-                let html = '';
-                for (let i = 0; i < 6; i++) {
-                    html += `
-                        <div class="news-card bg-surface dark:bg-surfaceDark rounded-xl overflow-hidden">
-                            <div class="h-56 skeleton w-full"></div>
-                            <div class="p-6 space-y-3">
-                                <div class="h-4 skeleton w-1/3 rounded"></div>
-                                <div class="h-6 skeleton w-full rounded"></div>
-                                <div class="h-4 skeleton w-5/6 rounded"></div>
-                                <div class="h-4 skeleton w-4/6 rounded"></div>
-                            </div>
-                        </div>
-                    `;
-                }
-                grid.innerHTML = html;
-            }
-
-            async fetchNews() {
-                // Чтобы не перегружать API, берем случайные 15 источников из топ-30 для мгновенного демо,
-                // а в реальном продакшене здесь был бы цикл по всем 105.
-                // Для демонстрации "100+" мы эмулируем выборку.
-                const activeSources = SOURCES_DB.sort(() => 0.5 - Math.random()).slice(0, 15);
-                
-                const promises = activeSources.map(async (source) => {
-                    try {
-                        const response = await fetch(`${this.apiUrl}${encodeURIComponent(source.url)}`);
-                        const data = await response.json();
-                        
-                        if (data.status === 'ok' && data.items.length > 0) {
-                            return data.items.slice(0, 1).map(item => ({
-                                id: this.generateId(item.title + source.name),
-                                title: item.title,
-                                excerpt: this.cleanHtml(item.description).substring(0, 150) + '...',
-                                image: item.thumbnail || item.enclosure?.link || this.getFallbackImage(source.cat),
-                                source: source.name,
-                                category: source.cat,
-                                link: item.link,
-                                pubDate: new Date(item.pubDate),
-                                isBookmark: this.state.bookmarks.includes(this.generateId(item.title + source.name))
-                            }));
-                        }
-                    } catch (e) {
-                        console.warn(`Failed to load ${source.name}`);
-                        return null;
-                    }
-                });
-
-                const results = await Promise.allSettled(promises);
-                const newNews = results
-                    .filter(r => r.status === 'fulfilled' && r.value !== null)
-                    .flatMap(r => r.value)
-                    .sort((a, b) => b.pubDate - a.pubDate);
-
-                if (newNews.length > 0) {
-                    this.state.news = newNews;
-                    this.applyFilters();
-                    this.updateTimestamp();
-                }
-            }
-
-            generateId(str) {
-                let hash = 0;
-                for (let i = 0; i < str.length; i++) {
-                    const char = str.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash;
-                }
-                return Math.abs(hash).toString(16);
-            }
-
-            cleanHtml(html) {
-                const tmp = document.createElement('div');
-                tmp.innerHTML = html;
-                return tmp.textContent || tmp.innerText || '';
-            }
-
-            getFallbackImage(category) {
-                const keywords = {
-                    'Технологии': 'technology,computer',
-                    'Бизнес': 'business,office',
-                    'Мир': 'world,city',
-                    'Наука': 'science,space',
-                    'Спорт': 'sport,stadium',
-                    'Здоровье': 'health,medical'
-                };
-                const kw = keywords[category] || 'news';
-                return `https://source.unsplash.com/800x600/?${kw}&sig=${Math.random()}`;
-            }
-
-            applyFilters() {
-                let filtered = this.state.news;
-
-                if (this.state.isBookmarksView) {
-                    filtered = filtered.filter(n => n.isBookmark);
-                    document.getElementById('section-title').textContent = 'Сохранённые материалы';
-                } else {
-                    document.getElementById('section-title').textContent = this.state.currentCategory === 'all' ? 'Последние события' : this.state.currentCategory;
-                }
-
-                if (this.state.currentCategory !== 'all' && !this.state.isBookmarksView) {
-                    filtered = filtered.filter(n => n.category === this.state.currentCategory);
-                }
-
-                if (this.state.searchQuery) {
-                    const q = this.state.searchQuery.toLowerCase();
-                    filtered = filtered.filter(n => 
-                        n.title.toLowerCase().includes(q) || 
-                        n.excerpt.toLowerCase().includes(q) ||
-                        n.source.toLowerCase().includes(q)
-                    );
-                }
-
-                this.state.filteredNews = filtered;
-                this.render();
-            }
-
-            render() {
-                const grid = document.getElementById('news-grid');
-                const emptyState = document.getElementById('empty-state');
-                const heroSection = document.getElementById('hero-section');
-                
-                document.getElementById('visible-news-count').textContent = this.state.filteredNews.length;
-                this.updateBookmarkCount();
-
-                if (this.state.filteredNews.length === 0) {
-                    grid.innerHTML = '';
-                    heroSection.innerHTML = '';
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
-
-                emptyState.classList.add('hidden');
-
-                // Рендер Hero (первая новость)
-                if (!this.state.isBookmarksView && this.state.currentCategory === 'all' && !this.state.searchQuery) {
-                    const hero = this.state.filteredNews[0];
-                    heroSection.innerHTML = `
-                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-surface dark:bg-surfaceDark rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-800 shadow-sm">
-                            <div class="lg:col-span-7 relative h-[400px] lg:h-[500px] group overflow-hidden">
-                                <img src="${hero.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1200'">
-                                <div class="absolute top-4 left-4 source-badge bg-accent text-white shadow-lg">
-                                    <i class="fa-solid fa-bolt mr-1"></i> ГЛАВНОЕ: ${hero.source}
-                                </div>
-                            </div>
-                            <div class="lg:col-span-5 p-8 lg:p-12 flex flex-col justify-center">
-                                <div class="flex items-center gap-3 text-xs font-mono text-stone-500 mb-4">
-                                    <span class="px-2 py-1 bg-stone-100 dark:bg-stone-800 rounded text-stone-600 dark:text-stone-300">${hero.category}</span>
-                                    <span>${this.formatDate(hero.pubDate)}</span>
-                                </div>
-                                <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-ink dark:text-paper leading-tight mb-6 hover:text-accent transition-colors cursor-pointer" onclick="window.open('${hero.link}', '_blank')">
-                                    ${hero.title}
-                                </h1>
-                                <p class="text-stone-600 dark:text-stone-300 text-lg leading-relaxed mb-8 line-clamp-3">
-                                    ${hero.excerpt}
-                                </p>
-                                <div class="flex flex-wrap gap-4">
-                                    <a href="${hero.link}" target="_blank" class="inline-flex items-center gap-2 bg-accent hover:bg-accentHover text-white px-6 py-3 rounded-lg font-semibold transition-all">
-                                        Читать оригинал <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
-                                    </a>
-                                    <button onclick="app.toggleBookmark('${hero.id}')" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all ${hero.isBookmark ? 'text-accent' : 'text-stone-600 dark:text-stone-300'}">
-                                        <i class="${hero.isBookmark ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-                                        ${hero.isBookmark ? 'Сохранено' : 'В избранное'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    heroSection.innerHTML = '';
-                }
-
-                // Рендер Grid (остальные новости)
-                const startIndex = (heroSection.innerHTML !== '') ? 1 : 0;
-                const gridItems = this.state.filteredNews.slice(startIndex);
-                
-                grid.innerHTML = gridItems.map((news, index) => `
-                    <article class="news-card bg-surface dark:bg-surfaceDark rounded-xl overflow-hidden flex flex-col reveal-item" style="animation-delay: ${index * 50}ms">
-                        <div class="relative h-56 overflow-hidden group">
-                            <img src="${news.image}" class="news-img w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800'">
-                            <div class="absolute top-3 left-3 source-badge bg-white/90 dark:bg-black/80 text-ink dark:text-white backdrop-blur-sm shadow-sm">
-                                ${news.source}
-                            </div>
-                            <button onclick="app.toggleBookmark('${news.id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 dark:bg-black/80 flex items-center justify-center text-stone-600 dark:text-stone-300 hover:text-accent transition-colors shadow-sm">
-                                <i class="${news.isBookmark ? 'fa-solid text-accent' : 'fa-regular'} fa-bookmark"></i>
-                            </button>
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <div class="flex items-center gap-2 text-xs font-mono text-stone-500 mb-3">
-                                <span class="text-accent font-semibold">${news.category}</span>
-                                <span>•</span>
-                                <span>${this.formatDate(news.pubDate)}</span>
-                            </div>
-                            <h3 class="font-display text-xl font-bold text-ink dark:text-paper mb-3 leading-snug line-clamp-2 hover:text-accent transition-colors cursor-pointer" onclick="window.open('${news.link}', '_blank')">
-                                ${news.title}
-                            </h3>
-                            <p class="text-stone-600 dark:text-stone-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-grow">
-                                ${news.excerpt}
-                            </p>
-                            <a href="${news.link}" target="_blank" class="inline-flex items-center gap-2 text-accent text-sm font-semibold hover:gap-3 transition-all mt-auto">
-                                Читать далее <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </article>
-                `).join('');
-            }
-
-            filterByCategory(cat) {
-                this.state.currentCategory = cat;
-                this.state.isBookmarksView = false;
-                
-                // Обновление UI кнопок
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    if (btn.dataset.category === cat) {
-                        btn.className = 'filter-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-semibold transition-all bg-ink text-white dark:bg-white dark:text-ink';
-                    } else {
-                        btn.className = 'filter-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-semibold transition-all bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700';
-                    }
-                });
-                
-                this.applyFilters();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            resetFilters() {
-                this.state.searchQuery = '';
-                document.getElementById('search-input').value = '';
-                document.getElementById('mobile-search-input').value = '';
-                this.filterByCategory('all');
-            }
-
-            toggleBookmarksView() {
-                this.state.isBookmarksView = !this.state.isBookmarksView;
-                this.state.currentCategory = 'all';
-                this.applyFilters();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            toggleBookmark(id) {
-                const index = this.state.bookmarks.indexOf(id);
-                if (index > -1) {
-                    this.state.bookmarks.splice(index, 1);
-                } else {
-                    this.state.bookmarks.push(id);
-                }
-                localStorage.setItem('bookmarks', JSON.stringify(this.state.bookmarks));
-                
-                // Обновляем состояние в массиве новостей
-                this.state.news = this.state.news.map(n => {
-                    if (n.id === id) n.isBookmark = !n.isBookmark;
-                    return n;
-                });
-                
-                this.applyFilters();
-            }
-
-            updateBookmarkCount() {
-                const badge = document.getElementById('bookmark-count');
-                if (this.state.bookmarks.length > 0) {
-                    badge.textContent = this.state.bookmarks.length;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
-
-            formatDate(date) {
-                const now = new Date();
-                const diff = (now - date) / 1000; // seconds
-                
-                if (diff < 60) return 'Только что';
-                if (diff < 3600) return `${Math.floor(diff / 60)} мин. назад`;
-                if (diff < 86400) return `${Math.floor(diff / 3600)} ч. назад`;
-                return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-            }
-
-            updateTimestamp() {
-                const now = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('last-sync-time').textContent = now;
-                document.getElementById('last-sync-time-2').textContent = now;
-            }
-
-            setupEventListeners() {
-                // Поиск с debounce
-                let timeout;
-                const handleSearch = (e) => {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        this.state.searchQuery = e.target.value;
-                        this.applyFilters();
-                    }, 300);
-                };
-                
-                document.getElementById('search-input').addEventListener('input', handleSearch);
-                document.getElementById('mobile-search-input').addEventListener('input', handleSearch);
-            }
-        }
-
-        // Инициализация приложения
-        const app = new NewsAggregator();
-    </script>
+    hydrateState();
+  </script>
 </body>
 </html>

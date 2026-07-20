@@ -1,0 +1,17 @@
+{
+  "name": "СВОЁ МНЕНИЕ",
+  "short_name": "СВОЁ",
+  "description": "Премиум агрегатор новостей с локальным сохранением фильтров",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0B08",
+  "theme_color": "#0D0B08",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>СВОЁ МНЕНИЕ · Mobile App Shell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-feature-settings: "kern" 1;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      background: linear-gradient(135deg, #040811 0%, #07111D 42%, #0A1727 100%);
+      color: #f7fbff;
+    }
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 18px 16px 96px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .app-card {
+      border: 1px solid rgba(255,255,255,0.11);
+      background: linear-gradient(180deg, rgba(255,255,255,0.073), rgba(255,255,255,0.048));
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 28px rgba(3,8,18,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .tab-pill {
+      transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+    }
+    .tab-pill.active {
+      background: linear-gradient(135deg, rgba(49,151,255,0.18), rgba(242,191,76,0.12));
+      color: white;
+      border-color: rgba(255,255,255,0.16);
+      box-shadow: 0 8px 18px rgba(4,9,20,0.16);
+    }
+    .story-pill {
+      min-width: 64px;
+      text-align: center;
+      font-size: 11px;
+      color: #dfeaff;
+    }
+    .feed-card {
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.07);
+      transform: translateY(0);
+      transition: transform 0.24s cubic-bezier(.2,.8,.2,1), box-shadow 0.24s ease, background 0.24s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 7px 18px rgba(2,8,20,0.10);
+    }
+    .feed-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 22px rgba(2,8,20,0.14);
+      background: rgba(255,255,255,0.09);
+    }
+    .tab-panel {
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .tab-panel.hidden {
+      display: none !important;
+    }
+    .feed-image {
+      height: 220px;
+      object-fit: cover;
+      width: 100%;
+      display: block;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-card rounded-[28px] p-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-[10px] uppercase tracking-[0.35em] text-[#7FC5FF]">Mobile app shell</div>
+          <h1 class="mt-1 text-2xl font-semibold text-white">Лента / Подборки / Избранное</h1>
+        </div>
+        <a href="/index.html" class="rounded-full border border-white/10 bg-white/10 px-3 py-2 text-sm text-white">Назад</a>
+      </div>
+
+      <div class="mt-4 flex gap-2 rounded-full border border-white/10 bg-black/15 p-1" id="topTabs">
+        <button class="tab-pill active flex-1 rounded-full px-3 py-2 text-sm font-medium" data-tab="feed">Лента</button>
+        <button class="tab-pill flex-1 rounded-full px-3 py-2 text-sm font-medium" data-tab="collections">Подборки</button>
+        <button class="tab-pill flex-1 rounded-full px-3 py-2 text-sm font-medium" data-tab="saved">Избранное</button>
+      </div>
+    </div>
+
+    <div class="flex gap-3 overflow-x-auto pb-1">
+      <div class="story-pill">
+        <div class="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#F2BF4C] bg-[#F2BF4C]/15 text-sm font-semibold text-white">+ </div>
+        <div>Ваше</div>
+      </div>
+      <div class="story-pill"><div class="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#3197FF] bg-[#3197FF]/15 text-sm font-semibold text-white">AI</div><div>AI</div></div>
+      <div class="story-pill"><div class="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#F2BF4C] bg-[#F2BF4C]/15 text-sm font-semibold text-white">T</div><div>Tech</div></div>
+      <div class="story-pill"><div class="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#3197FF] bg-[#3197FF]/15 text-sm font-semibold text-white">B</div><div>Бизнес</div></div>
+      <div class="story-pill"><div class="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#F2BF4C] bg-[#F2BF4C]/15 text-sm font-semibold text-white">M</div><div>Мир</div></div>
+    </div>
+
+    <div class="space-y-3">
+      <div id="panel-feed" class="tab-panel space-y-3">
+        <div class="feed-card app-card">
+          <img class="feed-image" src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80" alt="news" />
+          <div class="p-4">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-semibold text-white">Новая лента, как в Instagram</div>
+              <div class="rounded-full bg-[#F2BF4C]/15 px-2.5 py-1 text-[11px] font-semibold text-[#F2BF4C]">Hot</div>
+            </div>
+            <p class="mt-2 text-sm text-slate-300">Вертикальные карточки, быстрый просмотр и понятная навигация по разделам.</p>
+          </div>
+        </div>
+        <div class="feed-card app-card">
+          <img class="feed-image" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80" alt="news" />
+          <div class="p-4">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-semibold text-white">Подборки по темам</div>
+              <div class="rounded-full bg-[#3197FF]/20 px-2.5 py-1 text-[11px] font-semibold text-[#7FC5FF]">Saved</div>
+            </div>
+            <p class="mt-2 text-sm text-slate-300">Сохраняйте и быстро переходите к нужной подборке в один tap.</p>
+          </div>
+        </div>
+      </div>
+      <div id="panel-collections" class="tab-panel hidden space-y-3">
+        <div class="feed-card app-card p-4">
+          <div class="text-sm font-semibold text-white">Подборка: Технологии и люди</div>
+          <p class="mt-2 text-sm text-slate-300">Как AI меняет повседневную жизнь, работу и общение.</p>
+        </div>
+        <div class="feed-card app-card p-4">
+          <div class="text-sm font-semibold text-white">Подборка: Культура без границ</div>
+          <p class="mt-2 text-sm text-slate-300">Идентичность, личный архив и новые формы медиа.</p>
+        </div>
+      </div>
+      <div id="panel-saved" class="tab-panel hidden space-y-3">
+        <div class="feed-card app-card p-4">
+          <div class="text-sm font-semibold text-white">Избранное: Мнение и доверие</div>
+          <p class="mt-2 text-sm text-slate-300">Сохранённые материалы из редакционной колонки.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed bottom-3 left-1/2 z-20 flex w-[92%] max-w-[440px] -translate-x-1/2 items-center justify-between rounded-full border border-white/10 bg-[#07111D]/90 px-3 py-2 shadow-2xl backdrop-blur-xl" id="bottomNav">
+      <button class="rounded-full bg-[#3197FF] px-3 py-2 text-sm font-semibold text-white" data-tab="feed"><i class="fa-solid fa-house"></i></button>
+      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="collections"><i class="fa-solid fa-layer-group"></i></button>
+      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="saved"><i class="fa-solid fa-bookmark"></i></button>
+      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="feed"><i class="fa-solid fa-user"></i></button>
+    </div>
+  </div>
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-pill');
+    const bottomButtons = document.querySelectorAll('#bottomNav button');
+    const panels = document.querySelectorAll('.tab-panel');
+    const storageKey = 'mobile-shell-tab-v1';
+
+    function setActiveTab(tabName) {
+      const tabIndex = ['feed', 'collections', 'saved'].indexOf(tabName);
+      if (tabIndex < 0) return;
+
+      tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabName));
+      bottomButtons.forEach(btn => {
+        const isActive = btn.dataset.tab === tabName;
+        btn.classList.toggle('bg-[#3197FF]', isActive);
+        btn.classList.toggle('text-white', isActive);
+        btn.classList.toggle('text-slate-300', !isActive);
+      });
+
+      panels.forEach(panel => panel.classList.add('hidden'));
+      panels[tabIndex].classList.remove('hidden');
+      localStorage.setItem(storageKey, tabName);
+    }
+
+    const savedTab = localStorage.getItem(storageKey) || 'feed';
+    [ ...tabButtons, ...bottomButtons ].forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.tab) setActiveTab(btn.dataset.tab);
+      });
+    });
+
+    setActiveTab(savedTab);
+  </script>
+</body>
+</html>
