@@ -15,8 +15,8 @@
       font-feature-settings: "kern" 1;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
-      background: linear-gradient(135deg, #040811 0%, #07111D 42%, #0A1727 100%);
-      color: #f7fbff;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+      color: #111827;
     }
     .app-shell {
       max-width: 480px;
@@ -28,39 +28,39 @@
       gap: 12px;
     }
     .app-card {
-      border: 1px solid rgba(255,255,255,0.11);
-      background: linear-gradient(180deg, rgba(255,255,255,0.073), rgba(255,255,255,0.048));
-      backdrop-filter: blur(20px);
-      box-shadow: 0 10px 28px rgba(3,8,18,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: #ffffff;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
     }
     .tab-pill {
       transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
     }
     .tab-pill.active {
-      background: linear-gradient(135deg, rgba(49,151,255,0.18), rgba(242,191,76,0.12));
-      color: white;
-      border-color: rgba(255,255,255,0.16);
-      box-shadow: 0 8px 18px rgba(4,9,20,0.16);
+      background: rgba(37, 99, 235, 0.10);
+      color: #2563eb;
+      border-color: rgba(37, 99, 235, 0.16);
+      box-shadow: none;
     }
     .story-pill {
       min-width: 64px;
       text-align: center;
       font-size: 11px;
-      color: #dfeaff;
+      color: #475569;
     }
     .feed-card {
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
-      background: rgba(255,255,255,0.07);
+      background: #ffffff;
       transform: translateY(0);
-      transition: transform 0.24s cubic-bezier(.2,.8,.2,1), box-shadow 0.24s ease, background 0.24s ease;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 7px 18px rgba(2,8,20,0.10);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
     }
     .feed-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 9px 22px rgba(2,8,20,0.14);
-      background: rgba(255,255,255,0.09);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+      background: #fcfdff;
     }
     .tab-panel {
       transition: opacity 0.2s ease, transform 0.2s ease;
@@ -112,46 +112,45 @@
           <img class="feed-image" src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80" alt="news" />
           <div class="p-4">
             <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold text-white">Новая лента, как в Instagram</div>
+              <div class="text-sm font-semibold text-slate-900">Новая лента, как в Instagram</div>
               <div class="rounded-full bg-[#F2BF4C]/15 px-2.5 py-1 text-[11px] font-semibold text-[#F2BF4C]">Hot</div>
             </div>
-            <p class="mt-2 text-sm text-slate-300">Вертикальные карточки, быстрый просмотр и понятная навигация по разделам.</p>
+            <p class="mt-2 text-sm text-slate-600">Вертикальные карточки, быстрый просмотр и понятная навигация по разделам.</p>
           </div>
         </div>
         <div class="feed-card app-card">
           <img class="feed-image" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80" alt="news" />
           <div class="p-4">
             <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold text-white">Подборки по темам</div>
-              <div class="rounded-full bg-[#3197FF]/20 px-2.5 py-1 text-[11px] font-semibold text-[#7FC5FF]">Saved</div>
+              <div class="text-sm font-semibold text-slate-900">Подборки по темам</div>
+              <div class="rounded-full bg-[#3197FF]/20 px-2.5 py-1 text-[11px] font-semibold text-[#2563eb]">Saved</div>
             </div>
-            <p class="mt-2 text-sm text-slate-300">Сохраняйте и быстро переходите к нужной подборке в один tap.</p>
+            <p class="mt-2 text-sm text-slate-600">Сохраняйте и быстро переходите к нужной подборке в один tap.</p>
           </div>
         </div>
       </div>
       <div id="panel-collections" class="tab-panel hidden space-y-3">
         <div class="feed-card app-card p-4">
-          <div class="text-sm font-semibold text-white">Подборка: Технологии и люди</div>
-          <p class="mt-2 text-sm text-slate-300">Как AI меняет повседневную жизнь, работу и общение.</p>
+          <div class="text-sm font-semibold text-slate-900">Подборка: Технологии и люди</div>
+          <p class="mt-2 text-sm text-slate-600">Как AI меняет повседневную жизнь, работу и общение.</p>
         </div>
         <div class="feed-card app-card p-4">
-          <div class="text-sm font-semibold text-white">Подборка: Культура без границ</div>
-          <p class="mt-2 text-sm text-slate-300">Идентичность, личный архив и новые формы медиа.</p>
+          <div class="text-sm font-semibold text-slate-900">Подборка: Культура без границ</div>
+          <p class="mt-2 text-sm text-slate-600">Идентичность, личный архив и новые формы медиа.</p>
         </div>
       </div>
       <div id="panel-saved" class="tab-panel hidden space-y-3">
         <div class="feed-card app-card p-4">
-          <div class="text-sm font-semibold text-white">Избранное: Мнение и доверие</div>
-          <p class="mt-2 text-sm text-slate-300">Сохранённые материалы из редакционной колонки.</p>
+          <div class="text-sm font-semibold text-slate-900">Избранное: Мнение и доверие</div>
+          <p class="mt-2 text-sm text-slate-600">Сохранённые материалы из редакционной колонки.</p>
         </div>
       </div>
     </div>
 
-    <div class="fixed bottom-3 left-1/2 z-20 flex w-[92%] max-w-[440px] -translate-x-1/2 items-center justify-between rounded-full border border-white/10 bg-[#07111D]/90 px-3 py-2 shadow-2xl backdrop-blur-xl" id="bottomNav">
-      <button class="rounded-full bg-[#3197FF] px-3 py-2 text-sm font-semibold text-white" data-tab="feed"><i class="fa-solid fa-house"></i></button>
-      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="collections"><i class="fa-solid fa-layer-group"></i></button>
-      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="saved"><i class="fa-solid fa-bookmark"></i></button>
-      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-300" data-tab="feed"><i class="fa-solid fa-user"></i></button>
+    <div class="fixed bottom-3 left-1/2 z-20 flex w-[92%] max-w-[440px] -translate-x-1/2 items-center justify-between rounded-full border border-slate-200 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl" id="bottomNav">
+      <button class="rounded-full bg-[#2563eb]/10 px-3 py-2 text-sm font-semibold text-[#2563eb]" data-tab="feed"><i class="fa-solid fa-house"></i></button>
+      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-500" data-tab="collections"><i class="fa-solid fa-layer-group"></i></button>
+      <button class="rounded-full px-3 py-2 text-sm font-semibold text-slate-500" data-tab="saved"><i class="fa-solid fa-bookmark"></i></button>
     </div>
   </div>
   <script>

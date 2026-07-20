@@ -14,22 +14,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #050914;
-      --bg2: #0a1422;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.09);
-      --line: rgba(255,255,255,0.11);
-      --text: #f4f7fb;
-      --muted: #8ca2b8;
-      --accent: #3197FF;
-      --accent2: #F2BF4C;
-      --accent3: #8B5CF6;
-      --accent-soft: rgba(49,151,255,0.16);
-      --accent-soft-2: rgba(242,191,76,0.12);
-      --good: #34D399;
-      --radius: 22px;
-      --shadow: 0 18px 42px rgba(0,0,0,0.24);
-      --shadow-soft: 0 8px 20px rgba(2,8,20,0.16);
+      color-scheme: dark;
+      --bg: #010101;
+      --bg2: #030303;
+      --panel: rgba(0, 0, 0, 0.92);
+      --panel2: rgba(10, 10, 10, 0.9);
+      --line: rgba(245, 138, 34, 0.16);
+      --text: #f9f6f0;
+      --muted: #b4a48a;
+      --accent: #f59e0b;
+      --accent2: #ea580c;
+      --accent3: #c2410b;
+      --accent-soft: rgba(245, 158, 11, 0.18);
+      --accent-soft-2: rgba(234, 88, 12, 0.16);
+      --radius: 20px;
+      --shadow: 0 24px 48px rgba(2, 6, 23, 0.36);
+      --shadow-soft: 0 10px 24px rgba(2, 6, 23, 0.24);
     }
     * { box-sizing: border-box; }
     body {
@@ -39,79 +39,147 @@
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(49,151,255,0.10), transparent 22%),
-        radial-gradient(circle at 85% 0%, rgba(242,191,76,0.08), transparent 26%),
-        linear-gradient(135deg, var(--bg), var(--bg2));
+      background: radial-gradient(circle at top left, rgba(245,158,11,0.12), transparent 28%), linear-gradient(180deg, var(--bg), var(--bg2));
       min-height: 100vh;
       overflow-x: hidden;
+      overscroll-behavior-y: contain;
       padding: 16px;
-      line-height: 1.62;
+      line-height: 1.6;
     }
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.65), transparent);
+      background: radial-gradient(circle at top left, rgba(245,158,11,0.1), transparent 24%);
     }
     button, input { font: inherit; }
     a { color: inherit; text-decoration: none; }
-    .app { max-width: 1380px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .app { max-width: 1380px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 18px; }
+    .app { overscroll-behavior: contain; }
     .glass {
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
-      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(245,138,34,0.14);
       border-radius: var(--radius);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
-      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
     }
     .glass.panel:last-child {
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      background: rgba(255,255,255,0.05);
       box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px;
-      position: sticky; top: 10px; z-index: 30;
-      border-radius: 22px;
+    .hero-main {
+      padding: 22px; min-height: 248px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(245,138,34,0.14); box-shadow: 0 20px 42px rgba(0,0,0,0.52);
     }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+    .modal-card { width: min(820px, 100%); max-height: 90vh; overflow: auto; padding: 24px; border-radius: 30px; border: 1px solid rgba(148,163,184,0.16); background: rgba(15,23,42,0.5); box-shadow: 0 24px 54px rgba(2,6,23,0.3); position: relative; transform: translateY(10px) scale(0.98); opacity: 0; transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s ease; backdrop-filter: blur(20px); }
+    .mobile-nav .inner {
+      display: grid; grid-template-columns: 1fr; gap: 0; padding: 10px;
+      border-radius: 24px; background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148,163,184,0.5); box-shadow: 0 16px 30px rgba(2,6,23,0.28);
+      width: min(140px, 100%);
+    }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px;
+      position: sticky; top: 10px; z-index: 30;
+      border-radius: 20px;
+      background: transparent;
+      border: 1px solid transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
     .brand-mark {
       width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--accent), var(--accent3)); color: white;
-      box-shadow: 0 12px 28px rgba(49,151,255,0.26);
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white;
+      box-shadow: 0 12px 28px rgba(245,158,11,0.24);
     }
     .brand-sub { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.16em; }
-    .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .top-actions { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; align-items: center; min-width: 0; overflow-x: auto; }
+    .top-actions > * { flex-shrink: 0; }
+    .top-actions::-webkit-scrollbar { width: 0; height: 0; }
+    .translation-banner {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+      padding: 12px 14px; margin: 12px 0 0; border-radius: 22px;
+      border: 1px solid rgba(245,158,11,0.18); background: rgba(255,255,255,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px); color: var(--text);
+    }
+    .translation-banner.hidden { display: none; }
+    .translation-banner-copy { font-size: 0.92rem; color: #f8f5ef; }
+    .translation-banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .translation-banner .primary-btn, .translation-banner .secondary-btn {
+      padding: 8px 12px; border-radius: 999px; font-size: 0.82rem; line-height: 1.2;
+    }
+    .ai-card {
+      display: grid; gap: 10px; padding: 16px; margin: 14px 0 8px;
+      border-radius: 24px; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(245,158,34,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter: blur(18px);
+    }
+    .ai-card.hidden { display: none; }
+    .ai-headlines { display: grid; gap: 8px; }
+    .ai-headline { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .ai-headline span { color: var(--accent); font-size: 0.82rem; line-height: 1.2; min-width: 22px; text-align: center; }
     .pill, .icon-btn, .chip, .tab-btn, .action-btn, .nav-btn, .story-pill {
-      border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--text);
-      padding: 10px 12px; border-radius: 999px; cursor: pointer; transition: transform .22s cubic-bezier(.2,.8,.2,1), background .22s ease, border-color .22s ease, color .22s ease;
+      border: 1px solid var(--line); background: rgba(10,10,10,0.25); color: var(--text);
+      padding: 10px 12px; border-radius: 999px; cursor: pointer; transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+      opacity: 0.5;
     }
     .pill:hover, .icon-btn:hover, .chip:hover, .tab-btn:hover, .action-btn:hover, .nav-btn:hover, .story-pill:hover {
-      transform: translateY(-1px); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.09);
+      transform: translateY(-1px); border-color: rgba(148,163,184,0.2); background: rgba(30,41,59,0.35);
     }
     .pill.active, .tab-btn.active, .nav-btn.active {
-      background: linear-gradient(135deg, rgba(49,151,255,0.16), rgba(242,191,76,0.12));
-      border-color: rgba(255,255,255,0.16);
-      color: #f8fbff;
-      box-shadow: var(--shadow-soft);
+      background: var(--accent-soft);
+      border-color: rgba(245,158,11,0.18);
+      color: var(--accent);
+      box-shadow: none;
     }
-    .hero { display: grid; grid-template-columns: 1.4fr 0.9fr; gap: 16px; }
-    .hero-main { padding: 24px; min-height: 300px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    #homeBtn {
+      color: #ffb84d;
+      border-color: rgba(245,158,11,0.5);
+      background: rgba(245,158,11,0.2);
+      opacity: 0.5;
+    }
+    #favoritesBtn {
+      color: #7f1d40;
+      border-color: rgba(127,29,64,0.5);
+      background: rgba(127,29,64,0.2);
+      opacity: 0.5;
+    }
+    .hero { display: grid; grid-template-columns: 1.38fr 0.92fr; gap: 16px; }
+    .hero-main {
+      padding: 22px; min-height: 248px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      background: linear-gradient(135deg, rgba(0,0,0,0.96) 0%, rgba(10,6,3,0.95) 100%); border: 1px solid rgba(245,138,34,0.14); box-shadow: 0 20px 42px rgba(0,0,0,0.52);
+    }
+    .hero-main::before {
+      content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(245,158,11,0.1), transparent 40%, rgba(234,88,12,0.08)); pointer-events: none;
+    }
     .hero-main::after {
-      content: ''; position: absolute; inset: auto -40px -40px auto; width: 260px; height: 260px;
-      background: radial-gradient(circle, rgba(49,151,255,0.28), transparent 70%); pointer-events: none; filter: blur(6px);
+      content: ''; position: absolute; inset: auto -30px -30px auto; width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(245,158,11,0.14), transparent 72%); pointer-events: none;
     }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
       background: rgba(255,255,255,0.06); color: #dce8f9; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; width: fit-content; margin-bottom: 12px;
     }
-    .hero h1 { margin: 0 0 12px; font-size: clamp(1.9rem, 3vw, 3.1rem); line-height: 1.04; letter-spacing: -0.04em; font-weight: 800; }
-    .hero p { margin: 0; color: var(--muted); max-width: 700px; line-height: 1.66; font-size: 0.98rem; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(1.52rem, 2.25vw, 2.15rem); line-height: 1.04; letter-spacing: -0.03em; font-weight: 800; position: relative; z-index: 1; }
+    .hero p { margin: 0; color: var(--muted); max-width: 680px; line-height: 1.58; font-size: 0.94rem; position: relative; z-index: 1; }
     .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
     .primary-btn, .secondary-btn {
       padding: 11px 14px; border-radius: 999px; border: 1px solid transparent; font-weight: 700; cursor: pointer; transition: transform .2s ease;
+    }
+    .primary-btn.icon-only, .secondary-btn.icon-only {
+      padding: 10px; width: 38px; height: 38px; border-radius: 50%; font-size: 0; min-width: unset;
+    }
+    .primary-btn.icon-only i, .secondary-btn.icon-only i {
+      font-size: 1rem; margin: 0;
     }
     .primary-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #07111D; }
     .secondary-btn { background: rgba(255,255,255,0.08); border-color: var(--line); color: var(--text); }
@@ -121,54 +189,235 @@
     .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
     .stat-label { color: var(--muted); font-size: 0.92rem; }
     .stat-value { font-size: 1.12rem; font-weight: 800; }
-    .content { display: grid; grid-template-columns: 1.34fr .78fr; gap: 18px; align-items: start; }
-    .panel { padding: 20px; }
-    .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .panel-header h3 { margin: 0; font-size: 1.06rem; letter-spacing: -0.01em; font-weight: 700; }
+    .content { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: start; }
+    .panel { padding: 18px; border: 1px solid rgba(15,23,42,0.04); }
+    .feed-list { display: grid; gap: 14px; padding-bottom: 8px; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; padding-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .panel-header h3 { letter-spacing: -0.015em; }
+    .panel-header h3 { margin: 0; font-size: 0.92rem; letter-spacing: -0.01em; font-weight: 700; }
+    .compact-header { margin-bottom: 2px; padding-bottom: 1px; }
+    .compact-header .muted { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; }
     .muted { color: var(--muted); font-size: 0.9rem; }
-    .stories { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; }
-    .story-pill { min-width: 94px; text-align: center; padding: 10px; border-radius: 16px; }
-    .story-pill strong { display: block; font-size: 0.8rem; }
-    .story-pill span { color: var(--muted); font-size: 0.72rem; }
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-    .section-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .stories { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 10px; margin-bottom: 14px; }
+    .story-pill {
+      min-width: 104px; text-align: center; padding: 12px 10px; border-radius: 22px;
+      background: linear-gradient(145deg, rgba(10,10,10,0.96), rgba(18,12,6,0.92));
+      border: 1px solid rgba(245,138,34,0.12); box-shadow: 0 16px 28px rgba(0,0,0,0.32); transform: translateZ(0);
+    }
+    .story-pill:hover { transform: translateY(-2px) scale(1.01); }
+    .story-pill strong { display: block; font-size: 0.78rem; font-weight: 700; }
+    .story-pill span { color: var(--muted); font-size: 0.7rem; }
+    .story-pill .avatar {
+      width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 8px;
+      display: grid; place-items: center; font-weight: 800; color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 20px rgba(245,138,34,0.16);
+    }
+    .reels-row {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px;
+    }
+    .reel-card {
+      border-radius: 18px; padding: 12px; min-height: 104px; display: flex; flex-direction: column; justify-content: space-between;
+      color: white; background: linear-gradient(135deg, rgba(16,8,4,0.95), rgba(75,28,10,0.88));
+      box-shadow: 0 16px 26px rgba(0,0,0,0.3); border: 1px solid rgba(245,138,34,0.12);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .reel-card:hover { transform: translateY(-2px); box-shadow: 0 18px 32px rgba(2,6,23,0.26); }
+    .reel-card strong { font-size: 0.9rem; }
+    .reel-card span { opacity: 0.86; font-size: 0.74rem; }
+    .screen-overlay {
+      position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+      transition: opacity .28s ease;
+    }
+    .screen-overlay.is-open { opacity: 1; pointer-events: auto; }
+    .screen-backdrop {
+      position: absolute; inset: 0; background: rgba(2,6,23,0.72); backdrop-filter: blur(16px);
+    }
+    .screen-sheet {
+      position: relative; width: min(440px, calc(100vw - 24px)); max-height: min(84vh, 760px); overflow: hidden;
+      border-radius: 30px; background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(2,6,23,0.96));
+      border: 1px solid rgba(148,163,184,0.18); box-shadow: 0 24px 48px rgba(2,6,23,0.36);
+      transform: translateY(18px) scale(0.97); transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    }
+    .screen-overlay.is-open .screen-sheet { transform: translateY(0) scale(1); }
+    .story-sheet { width: min(460px, calc(100vw - 18px)); height: min(86vh, 760px); display: flex; flex-direction: column; }
+    .screen-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 14px 10px; }
+    .screen-badge { padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.12); color: #fff; font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+    .screen-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255,255,255,0.12); color: white; cursor: pointer; }
+    .story-media {
+      flex: 1; margin: 0 12px 12px; border-radius: 24px; padding: 18px; background: linear-gradient(135deg, rgba(10,6,3,0.98), rgba(90,30,9,0.9));
+      display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden;
+    }
+    .story-media::after {
+      content: ''; position: absolute; inset: auto -20px -30px auto; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,0.16);
+    }
+    body.overlay-open { overflow: hidden; }
+    .story-progress { display: flex; gap: 6px; padding: 0 12px 10px; }
+    .story-progress span { flex: 1; height: 3px; border-radius: 999px; background: rgba(255,255,255,0.24); overflow: hidden; }
+    .story-progress span i { display: block; height: 100%; width: 0; background: white; animation: storyProgress 3.8s linear forwards; }
+    .story-content { position: relative; z-index: 1; }
+    .story-content h4 { margin: 0 0 6px; font-size: 1.12rem; }
+    .story-content p { margin: 0; color: rgba(255,255,255,0.92); font-size: 0.92rem; line-height: 1.6; }
+    .reel-stack { padding: 0 12px 12px; display: grid; gap: 8px; }
+    .reel-item { border-radius: 18px; padding: 12px 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; }
+    .reel-item strong { display: block; margin-bottom: 4px; }
+    .reel-item span { color: rgba(255,255,255,0.78); font-size: 0.8rem; }
+    @keyframes storyProgress { from { width: 0; } to { width: 100%; } }
+    .tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 4px; border-radius: 999px;
+      background: rgba(15,23,42,0.04); width: fit-content; transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .tab-btn {
+      padding: 8px 12px; border-radius: 999px; border: none; background: transparent; color: var(--muted);
+      transition: transform .2s ease, background .2s ease, color .2s ease; box-shadow: none;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 10px 18px rgba(245,138,34,0.18);
+    }
+    .section-nav {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 6px; border-radius: 999px;
+      background: rgba(15,23,42,0.46); width: fit-content; border: 1px solid rgba(148,163,184,0.14);
+    }
     .section-btn {
-      padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05); color: var(--muted); cursor: pointer;
+      padding: 8px 12px; border-radius: 999px; border: 1px solid transparent;
+      background: transparent; color: var(--muted); cursor: pointer;
       transition: transform .2s ease, background .2s ease, color .2s ease;
     }
     .section-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.1); color: var(--text); }
-    .section-btn.active { background: linear-gradient(135deg, rgba(49,151,255,0.22), rgba(242,191,76,0.16)); color: var(--text); border-color: rgba(255,255,255,0.24); }
-    .search-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-    .search-box { flex: 1; min-width: 220px; padding: 12px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.07); color: var(--text); outline: none; }
-    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-    .chip.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.24); }
-    .feed-list { display: grid; gap: 12px; }
-    .feed-card {
-      padding: 15px 16px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.05);
-      display: grid; gap: 10px; transition: transform .24s cubic-bezier(.2,.8,.2,1), border-color .24s ease, background .24s ease, box-shadow .24s ease; cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 7px 18px rgba(2,8,20,0.10);
+    .section-btn.active { background: linear-gradient(135deg, rgba(245,138,34,0.18), rgba(234,88,12,0.14)); color: var(--text); border-color: rgba(255,255,255,0.24); }
+    .search-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+    .chips {
+      display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 4px; padding: 2px; border-radius: 999px;
+      background: rgba(15,23,42,0.24); width: fit-content; border: 1px solid rgba(148,163,184,0.08);
     }
-    .feed-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.07); box-shadow: 0 9px 20px rgba(2,8,20,0.14); }
-    .feed-card h4 { font-size: 1.01rem; line-height: 1.36; letter-spacing: -0.01em; }
-    .feed-card p { font-size: 0.94rem; line-height: 1.66; }
+    .chip { background: transparent; border-color: transparent; color: var(--muted); padding: 4px 6px; font-size: 0.68rem; }
+    .chip.active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.12); color: var(--text); }
+    .feed-list { display: grid; gap: 13px; transition: opacity .2s ease, transform .2s ease; will-change: transform, opacity; }
+    .feed-list.is-switching { opacity: 0; transform: translateY(6px); }
+    .feed-list.is-loading { opacity: 0.92; }
+    .feed-skeleton-card {
+      height: 120px; border-radius: 22px; border: 1px solid rgba(148,163,184,0.16); background: linear-gradient(90deg, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.9) 50%, rgba(30,41,59,0.95) 100%);
+      background-size: 200% 100%; animation: skeletonPulse 1.1s linear infinite;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    @keyframes skeletonPulse {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    .feed-card {
+      padding: 0 0 12px; border-radius: 28px; border: 1px solid rgba(148,163,184,0.16); background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
+      display: grid; gap: 10px; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; cursor: pointer;
+      box-shadow: 0 24px 44px rgba(2,6,23,0.28), inset 0 1px 0 rgba(255,255,255,0.08); position: relative; overflow: hidden; isolation: isolate; transform-origin: center center;
+      animation: cardIn .35s cubic-bezier(.2,.8,.2,1) both;
+      animation-delay: var(--delay, 0ms);
+      opacity: 0;
+      scroll-snap-align: start;
+    }
+    .feed-card::before {
+      content: ''; position: absolute; inset: 0 0 auto 0; height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #ea580c);
+      opacity: 0.95;
+    }
+    .feed-card:hover { transform: translateY(-3px) scale(1.005); box-shadow: 0 28px 48px rgba(2,6,23,0.34), inset 0 1px 0 rgba(255,255,255,0.1); }
+    .feed-card:active { transform: translateY(-1px) scale(0.998); }
+    .feed-card h4 {
+      font-size: 1.14rem; line-height: 1.24; letter-spacing: -0.02em; font-weight: 800;
+      margin: 0; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .feed-card p {
+      font-size: 0.92rem; line-height: 1.54; margin: 0; color: var(--muted);
+      display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .feed-card .card-top {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 12px 2px;
+    }
+    .feed-card .cover {
+      position: relative; padding: 14px; border-radius: 24px; min-height: 212px; color: white; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between; box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 16px 32px rgba(0,0,0,0.38);
+      transform: translateZ(0); margin: 12px 12px 0; background: linear-gradient(135deg, rgba(10,10,10,0.98), rgba(45,18,8,0.92));
+    }
+    .feed-card .cover::after {
+      content: ''; position: absolute; inset: auto -20px -30px auto; width: 180px; height: 180px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.28), transparent 72%);
+      pointer-events: none; z-index: 1;
+    }
+    .feed-card .cover .cover-media {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transform: scale(1.03);
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 0;
+      background: linear-gradient(135deg, rgba(10,10,10,0.92), rgba(40,16,8,0.9));
+    }
+    .feed-card .cover .cover-media.is-ready {
+      opacity: 1; transform: scale(1);
+    }
+    .feed-card .cover .cover-overlay {
+      position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; min-height: 184px;
+    }
+    .feed-card .cover .cover-top, .feed-card .cover .cover-foot {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px; position: relative; z-index: 1;
+    }
+    .feed-card .cover .cover-score {
+      font-size: 0.76rem; font-weight: 700; padding: 6px 8px; border-radius: 999px; background: rgba(255,255,255,0.16);
+    }
+    .feed-card .cover strong {
+      font-size: 1.02rem; line-height: 1.28; max-width: 92%; position: relative; z-index: 1;
+    }
+    .feed-card .cover .cover-foot { font-size: 0.78rem; opacity: 0.9; }
+    .feed-card .cover .media-badge {
+      position: absolute; top: 12px; right: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 8px; border-radius: 999px; background: rgba(15,23,42,0.7); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .feed-card .post-preview {
+      display: flex; align-items: flex-start; padding: 10px 12px; margin: 0 12px; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(245,138,34,0.12), rgba(234,88,12,0.12)); border: 1px solid rgba(245,138,34,0.14);
+    }
+    .feed-card .post-preview span { font-size: 0.9rem; color: var(--muted); line-height: 1.55; }
+    .feed-card .card-top .author {
+      display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem;
+    }
+    .feed-card .card-top .author .avatar-mini {
+      width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-size: 0.8rem; font-weight: 800;
+    }
     .feed-head, .feed-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 0.84rem; }
+    .feed-foot.center-row { justify-content: space-between; gap: 10px; padding: 0 12px; box-sizing: border-box; }
+    .feed-foot.center-row .actions { margin: 0; }
+    .feed-foot.center-row .like-btn { margin: 0 auto; }
+    .meta { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; color: var(--muted); font-size: 0.84rem; }
     .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 9px; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
     .badge.opinion { background: rgba(242,191,76,0.16); color: #ffd997; }
-    .badge.rss { background: rgba(49,151,255,0.16); color: #b7d7ff; }
-    .feed-card h4 { margin: 0; font-size: 1rem; line-height: 1.45; }
-    .feed-card p { margin: 0; color: var(--muted); font-size: 0.94rem; line-height: 1.65; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge.rss { background: rgba(245,138,34,0.12); color: #ffd7a8; }
+    .feed-card h4 { margin: 0 12px; font-size: 1rem; line-height: 1.45; }
+    .feed-card p { margin: 0 12px; color: var(--muted); font-size: 0.94rem; line-height: 1.65; }
+    .feed-list { scroll-snap-type: y proximity; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 2px 12px 0; }
+    .action-btn {
+      padding: 7px 9px; border-radius: 999px; background: rgba(255,255,255,0.06); border-color: var(--line);
+      color: var(--text); font-size: 0.82rem; display: inline-flex; align-items: center; gap: 5px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .action-btn.icon-only {
+      width: 38px; min-width: 38px; padding: 10px; font-size: 0; gap: 0; justify-content: center;
+    }
+    .action-btn.icon-only i {
+      font-size: 1rem;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .action-btn:hover { transform: translateY(-1px); }
+    .action-btn:active { transform: scale(0.97); }
     .action-btn.active {
-      background: rgba(49,151,255,0.12);
-      border-color: rgba(49,151,255,0.24);
-      color: #f6fbff;
+      background: var(--accent-soft);
+      border-color: rgba(245,138,34,0.16);
+      color: var(--accent);
       box-shadow: none;
     }
     .action-btn.active[data-action="save"] {
-      background: rgba(52,211,153,0.12);
-      border-color: rgba(52,211,153,0.22);
+      background: rgba(16,185,129,0.12);
+      border-color: rgba(16,185,129,0.22);
+      color: #047857;
     }
     .mini-card { padding: 13px 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.05); margin-bottom: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
     .mini-card h4 { margin: 0 0 6px; font-size: 0.96rem; line-height: 1.35; }
@@ -177,113 +426,106 @@
     .trend-item:last-child { border-bottom: none; }
     .trend-item strong { color: var(--text); }
     .empty { padding: 20px; text-align: center; color: var(--muted); border: 1px dashed rgba(255,255,255,0.14); border-radius: 18px; background: rgba(255,255,255,0.04); }
-    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px; z-index: 60; background: rgba(3,8,18,0.72); backdrop-filter: blur(10px); }
-    .modal.open { display: flex; }
-    .modal-card { width: min(820px, 100%); max-height: 90vh; overflow: auto; padding: 24px; border-radius: 30px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06)); box-shadow: var(--shadow); position: relative; }
-    .modal-card h3 { margin: 0 0 10px; font-size: 1.45rem; line-height: 1.3; }
-    .modal-card p { color: var(--muted); line-height: 1.8; }
-    .close-btn { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
-    .mobile-nav { display: none; justify-content: center; margin-top: 6px; }
-    .mobile-nav .inner { display: flex; gap: 8px; padding: 8px; border-radius: 999px; background: rgba(7,17,29,0.9); border: 1px solid var(--line); box-shadow: var(--shadow); width: min(460px, 100%); }
-    .mobile-nav .nav-btn { flex: 1; text-align: center; padding: 10px 8px; font-size: 0.84rem; }
+    .modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 60; background: rgba(3,8,18,0.72); backdrop-filter: blur(10px); visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+    .modal.open { visibility: visible; opacity: 1; pointer-events: auto; }
+    .modal-card { width: min(820px, 100%); max-height: 90vh; overflow: auto; padding: 24px; border-radius: 30px; border: 1px solid rgba(148,163,184,0.16); background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(2,6,23,0.96)); box-shadow: 0 24px 54px rgba(2,6,23,0.3); position: relative; transform: translateY(10px) scale(0.98); opacity: 0; transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s ease; backdrop-filter: blur(20px); }
+    .modal.open .modal-card { transform: translateY(0) scale(1); opacity: 1; }
+    .modal-card h3 { margin: 0 0 10px; font-size: 1.45rem; line-height: 1.3; color: #f8fafc; }
+    .modal-card p { color: #cbd5e1; line-height: 1.8; }
+    .close-btn { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(15,23,42,0.86); color: white; cursor: pointer; }
+    .mobile-nav { display: flex; justify-content: center; margin: 6px 0 8px; position: sticky; bottom: 10px; z-index: 40; opacity: var(--mobile-nav-opacity, 1); transition: opacity .25s ease; }
+    .mobile-nav .inner {
+      display: grid; grid-template-columns: 1fr; gap: 0; padding: 10px;
+      border-radius: 24px; background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148,163,184,0.5); box-shadow: 0 16px 30px rgba(2,6,23,0.28);
+      width: min(140px, 100%);
+    }
+    .mobile-nav .nav-btn {
+      width: 100%; text-align: center; padding: 12px 0; font-size: 0.92rem; border-radius: 999px; border: none; background: transparent;
+      color: var(--text); opacity: 0.5; transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+    .mobile-nav .nav-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 10px 16px rgba(245,138,34,0.18); transform: translateY(-1px);
+    }
+    .mobile-nav .nav-btn i { font-size: 1.05rem; margin-bottom: 0; }
+    .fab {
+      position: fixed; right: 16px; bottom: 88px; width: 52px; height: 52px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 16px 30px rgba(245,138,34,0.18);
+      display: grid; place-items: center; z-index: 50; cursor: pointer;
+    }
+    .media-preview { margin: 14px 0 16px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
+    .media-preview img, .media-preview video { display: block; width: 100%; max-height: 280px; object-fit: cover; }
+    .modal-card .eyebrow { margin-bottom: 8px; }
+    .topbar, .hero-main, .stats, .panel, .feed-card {
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+    .app.is-switching .topbar, .app.is-switching .hero-main, .app.is-switching .stats, .app.is-switching .panel {
+      opacity: 0.9; transform: translateY(2px);
+    }
     @media (max-width: 1050px) { .hero { grid-template-columns: 1fr; } .content { grid-template-columns: 1fr; } }
     @media (max-width: 700px) {
       body { padding: 12px; }
-      .topbar { flex-wrap: wrap; border-radius: 24px; }
-      .top-actions { width: 100%; justify-content: flex-start; }
+      .topbar { flex-wrap: nowrap; border-radius: 24px; }
+      .top-actions { width: auto; justify-content: flex-start; }
       .mobile-nav { display: flex; }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <header class="topbar glass">
+    <header class="topbar">
       <div class="brand">
         <div class="brand-mark"><i class="fa-solid fa-bolt"></i></div>
-        <div>
-          <div>NewsLab</div>
-          <div class="brand-sub">Собственное мнение. Редакционный ритм.</div>
-        </div>
+        <div>NewsLab</div>
       </div>
       <div class="top-actions">
-        <button class="pill active"><i class="fa-solid fa-rss"></i> RSS + редакция</button>
-        <button class="pill"><i class="fa-solid fa-fire"></i> Горячее</button>
-        <button class="pill"><i class="fa-solid fa-eye"></i> Личный фокус</button>
-        <a class="pill" href="/mobile-app-shell.html"><i class="fa-solid fa-mobile-screen-button"></i> App shell</a>
+        <button class="pill" id="homeBtn" title="Главная"><i class="fa-solid fa-house"></i></button>
+        <button class="pill" id="favoritesBtn" title="Избранное"><i class="fa-solid fa-heart"></i></button>
       </div>
     </header>
-
-    <section class="hero">
-      <article class="hero-main glass">
-        <div>
-          <div class="eyebrow"><i class="fa-solid fa-sparkles"></i> Полноценное новостное агентство</div>
-          <h1>Собственное мнение, живые подборки, персональная лента и сильный редакторский движок — уже как настоящее медиа.</h1>
-          <p>Мы собрали продуктовый слой вокруг новостей: редакторский голос, быстрый RSS-поток, подборки по темам, личные лайки и сохранения в одном интерфейсе. Система хранит состояние локально, а контент можно обновлять в реальном времени.</p>
-          <div class="hero-actions">
-            <button class="primary-btn" id="openFeedBtn"><i class="fa-solid fa-play"></i> Открыть ленту</button>
-            <button class="secondary-btn" id="openCollectionsBtn"><i class="fa-solid fa-layer-group"></i> Смотреть подборки</button>
-          </div>
-        </div>
-        <div class="meta" style="margin-top: 16px;"><span><i class="fa-solid fa-globe"></i> 24 источника</span><span>•</span><span><i class="fa-solid fa-pen-nib"></i> 5 редакторских колонок</span><span>•</span><span><i class="fa-solid fa-shield-halved"></i> Локальное сохранение</span></div>
-      </article>
-      <aside class="glass stats">
-        <div class="panel-header">
-          <h3>Сводка редакции</h3>
-          <span class="muted">Live</span>
-        </div>
-        <div class="stat-row"><div class="stat-label">Сегодня в фокусе</div><div class="stat-value" id="focusCount">0</div></div>
-        <div class="stat-row"><div class="stat-label">Сохранено</div><div class="stat-value" id="savedCount">0</div></div>
-        <div class="stat-row"><div class="stat-label">Лайков</div><div class="stat-value" id="likeCount">0</div></div>
-        <div class="stat-row"><div class="stat-label">Подборок</div><div class="stat-value" id="collectionCount">0</div></div>
-      </aside>
-    </section>
+    <div id="translationPrompt" class="translation-banner hidden"></div>
 
     <section class="content">
       <div class="glass panel">
-        <div class="panel-header">
-          <h3>Лента и редакционный поток</h3>
-          <span class="muted" id="feedCounter">0 материалов</span>
+        
+        <div class="ai-card hidden" id="aiCard">
+          <div class="ai-headlines" id="aiHeadlines"></div>
         </div>
-        <div class="stories" id="stories"></div>
-        <div class="tabs" id="tabs"></div>
-        <div class="section-nav" id="sectionNav"></div>
-        <div class="search-row">
-          <input class="search-box" id="searchBox" placeholder="Поиск по теме, автору, источнику" />
-          <button class="icon-btn" id="refreshBtn"><i class="fa-solid fa-rotate-right"></i></button>
-        </div>
-        <div class="chips" id="topicRow"></div>
         <div class="feed-list" id="feedContainer"></div>
       </div>
-
-      <aside class="glass panel">
-        <div class="panel-header">
-          <h3>Наше мнение</h3>
-          <span class="muted">Редакционная колонка</span>
-        </div>
-        <div id="opinionContainer"></div>
-        <div style="margin-top: 16px;">
-          <div class="panel-header">
-            <h3>Тренды</h3>
-            <span class="muted">Сегодня</span>
-          </div>
-          <div id="trendContainer"></div>
-        </div>
-        <div style="margin-top: 16px;">
-          <div class="panel-header">
-            <h3>Подборки</h3>
-            <span class="muted">Микс по темам</span>
-          </div>
-          <div id="collectionContainer"></div>
-        </div>
-      </aside>
     </section>
   </div>
 
-  <div class="mobile-nav">
+  <div class="screen-overlay" id="storyOverlay" aria-hidden="true">
+    <div class="screen-backdrop" data-close="story"></div>
+    <div class="screen-sheet story-sheet">
+      <div class="screen-header">
+        <span class="screen-badge">Stories</span>
+        <button class="screen-close" id="closeStoryBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="story-progress" id="storyProgress"></div>
+      <div class="story-media" id="storyMedia"></div>
+      <div class="screen-header" style="padding-top: 8px;">
+        <button class="icon-btn" id="prevStoryBtn"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="icon-btn" id="nextStoryBtn"><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-overlay" id="reelOverlay" aria-hidden="true">
+    <div class="screen-backdrop" data-close="reel"></div>
+    <div class="screen-sheet">
+      <div class="screen-header">
+        <span class="screen-badge">Reels</span>
+        <button class="screen-close" id="closeReelBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="reel-stack" id="reelStack"></div>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobileNav">
     <div class="inner">
-      <button class="nav-btn active" data-tab="feed"><i class="fa-solid fa-house"></i><br/>Лента</button>
-      <button class="nav-btn" data-tab="collections"><i class="fa-solid fa-layer-group"></i><br/>Подборки</button>
-      <button class="nav-btn" data-tab="saved"><i class="fa-solid fa-bookmark"></i><br/>Избранное</button>
     </div>
   </div>
 
@@ -295,15 +537,37 @@
     const state = {
       activeTab: 'feed',
       activeLane: 'all',
-      category: 'all',
-      mood: 'all',
       search: '',
       liked: new Set(),
-      saved: new Set(),
       articles: [],
       opinions: [],
       trends: [],
-      stories: []
+      stories: [],
+      rssLoading: false,
+      rssCache: null,
+      rssCacheRaw: null,
+      translateRss: false,
+      translateTargetLang: 'ru',
+      translationConsent: null,
+      aiDigest: null,
+      aiScanSources: 0,
+      rssUpdatedAt: 0,
+      prefetchCache: {},
+      rssRefreshTimer: null,
+      viewCache: {},
+      lastRenderKey: '',
+      viewHistory: {},
+      previousView: null,
+      activeStoryIndex: 0,
+      activeReelIndex: 0,
+      storyOverlayOpen: false,
+      reelOverlayOpen: false,
+      lastRefreshAt: Date.now(),
+      storyTimer: null,
+      touchStartX: 0,
+      touchEndX: 0,
+      renderVersion: 0,
+      pendingRerender: null
     };
 
     const tabs = ['feed', 'collections', 'saved'];
@@ -314,8 +578,6 @@
       { key: 'video', label: 'Видео' },
       { key: 'curation', label: 'Подборки' }
     ];
-    const categories = ['all', 'политика', 'технологии', 'экономика', 'культура', 'наука', 'мнения'];
-    const moods = ['all', 'сильный', 'глубокий', 'технологичный', 'личный'];
 
     const baseArticles = [
       { id: 1, title: 'Города учатся жить в режиме умного доверия', summary: 'Новые сервисы становятся новой формой публичного договора между городом и человеком.', source: 'NewsLab', author: 'Аня Кузнецова', category: 'политика', mood: 'сильный', time: '12 мин назад', opinion: true, tags: ['город', 'доверие', 'сервис'], body: 'Сильное медиа не просто сообщает факты. Оно помогает увидеть направление, в котором движется общество.', score: 92 },
@@ -352,100 +614,380 @@
     ];
 
     const collections = [
-      { title: 'Утренний выпуск', subtitle: 'Быстрый взгляд на главное с утра', color: '#3197FF' },
-      { title: 'Технологии и люди', subtitle: 'Как AI меняет повседневную жизнь', color: '#F2BF4C' },
-      { title: 'Культура без границ', subtitle: 'Идентичность и медиа в одном потоке', color: '#8B5CF6' },
-      { title: 'Публичные сервисы', subtitle: 'Когда институт становится понятным для людей', color: '#34D399' }
+      { title: 'Утренний выпуск', subtitle: 'Быстрый взгляд на главное с утра', color: '#ff9d35' },
+      { title: 'Технологии и люди', subtitle: 'Как AI меняет повседневную жизнь', color: '#ffb54e' },
+      { title: 'Культура без границ', subtitle: 'Идентичность и медиа в одном потоке', color: '#ff9c42' },
+      { title: 'Публичные сервисы', subtitle: 'Когда институт становится понятным для людей', color: '#ffb94b' }
     ];
 
     const trends = ['ИИ в городах', 'Редакционная честность', 'Рынок доверия', 'Новые сценарии роста', 'Культура в персональном формате', 'Прозрачность государственных сервисов'];
     const stories = [
-      { title: 'Главное', subtitle: 'Сводка дня' },
-      { title: 'Мнение', subtitle: 'Редакция' },
-      { title: 'Тренды', subtitle: 'Что растет' },
-      { title: 'Подборки', subtitle: 'По темам' },
-      { title: 'Избранное', subtitle: 'Сохранили' },
-      { title: 'RSS', subtitle: 'Вживую' }
+      { title: 'Главное', subtitle: 'Сводка дня', body: 'Сильный старт дня: ключевые факты, подача, и тональность уже подобраны.' },
+      { title: 'Мнение', subtitle: 'Редакция', body: 'Редакционное мнение формируется не из шума, а из смысла и ясной позиции.' },
+      { title: 'Тренды', subtitle: 'Что растет', body: 'Тренды уже становятся частью повседневного языка — их видно в ленте и в ритме.' },
+      { title: 'Подборки', subtitle: 'По темам', body: 'Подборки помогают быстро перелистнуть поверхностный шум и попасть в нужный смысл.' },
+      { title: 'Избранное', subtitle: 'Сохранили', body: 'То, что важно, всегда рядом и легко возвращается к чтению.' },
+      { title: 'RSS', subtitle: 'Вживую', body: 'Лента живет и обновляется — словно это не просто экран, а настоящий поток.' }
     ];
+    const reels = [
+      { title: 'Reels', subtitle: 'Лента в формате коротких обновлений', body: 'Короткие блоки, быстрый ритм и аккуратная подача.' },
+      { title: 'Live', subtitle: 'Новости с живым фокусом', body: 'Тонко и быстро: главное без лишней перегрузки.' },
+      { title: 'Pulse', subtitle: 'Редакционный ритм', body: 'Смысл и динамика в одном потоке.' }
+    ];
+    const rssSourceBase = [
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Opinion.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml' },
+      { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/business/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/health/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/culture/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/education/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/politics/rss.xml' },
+      { url: 'https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml' },
+      { url: 'https://www.theguardian.com/world/rss' },
+      { url: 'https://www.theguardian.com/business/rss' },
+      { url: 'https://www.theguardian.com/technology/rss' },
+      { url: 'https://www.theguardian.com/science/rss' },
+      { url: 'https://www.theguardian.com/culture/rss' },
+      { url: 'https://www.theguardian.com/travel/rss' },
+      { url: 'https://www.theguardian.com/environment/rss' },
+      { url: 'https://www.theguardian.com/politics/rss' },
+      { url: 'https://www.theguardian.com/lifeandstyle/rss' },
+      { url: 'https://www.theguardian.com/sport/rss' },
+      { url: 'https://rss.cnn.com/rss/cnn_topstories.rss' },
+      { url: 'https://rss.cnn.com/rss/world.rss' },
+      { url: 'https://rss.cnn.com/rss/business.rss' },
+      { url: 'https://rss.cnn.com/rss/tech.rss' },
+      { url: 'https://rss.cnn.com/rss/entertainment.rss' },
+      { url: 'https://rss.cnn.com/rss/sport.rss' }
+    ];
+    const rssSources = rssSourceBase;
 
     function hydrateState() {
       try {
         const saved = JSON.parse(localStorage.getItem('newslab-state-v3') || '{}');
         if (Array.isArray(saved.liked)) state.liked = new Set(saved.liked);
-        if (Array.isArray(saved.saved)) state.saved = new Set(saved.saved);
         if (saved.activeTab) state.activeTab = saved.activeTab;
         if (saved.activeLane) state.activeLane = saved.activeLane;
-        if (saved.category) state.category = saved.category;
-        if (saved.mood) state.mood = saved.mood;
+        if (typeof saved.translateRss === 'boolean') state.translateRss = saved.translateRss;
       } catch (e) {}
-      state.articles = [...baseArticles].sort((a, b) => b.score - a.score);
+      state.translationConsent = getSavedTranslationConsent()?.status || null;
+      state.articles = [];
       state.opinions = opinionCards;
       state.trends = trends;
       state.stories = stories;
-      loadRssFeeds();
+      try {
+        const cached = JSON.parse(localStorage.getItem('newslab-rss-cache-v1') || 'null');
+        if (cached?.items?.length) {
+          state.rssCacheRaw = cached.rawItems || cached.items;
+          state.rssCache = cached.items;
+          state.rssUpdatedAt = cached.updatedAt || 0;
+          state.articles = [...state.rssCache].sort((a, b) => b.score - a.score);
+          if (state.translateRss) {
+            setTimeout(async () => {
+              state.rssCache = await translateRssItems(state.rssCacheRaw);
+              state.articles = [...state.rssCache].sort((a, b) => b.score - a.score);
+              scheduleRender();
+            }, 0);
+          }
+        }
+      } catch (e) {}
+      render();
+      startLiveTicker();
+      setTimeout(() => loadRssFeeds(), 0);
+    }
+
+    function snapshotState(viewState = state) {
+      return {
+        activeTab: viewState.activeTab,
+        activeLane: viewState.activeLane,
+        search: viewState.search
+      };
+    }
+
+    function getSavedTranslationConsent() {
+      try {
+        return JSON.parse(localStorage.getItem('newslab-translate-consent-v1') || 'null');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveTranslationConsent(status, targetLang) {
+      const payload = { status, targetLang };
+      localStorage.setItem('newslab-translate-consent-v1', JSON.stringify(payload));
+    }
+
+    function resolveDeviceLanguage() {
+      const locale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+      return locale.toLowerCase();
+    }
+
+    function getSuggestedTargetLang() {
+      const locale = resolveDeviceLanguage();
+      const lang = locale.split('-')[0];
+      if (lang === 'en') return null;
+      return lang;
+    }
+
+    function shouldShowTranslationPrompt() {
+      if (state.translateRss || state.translationConsent === 'declined') return false;
+      const suggested = getSuggestedTargetLang();
+      return !!suggested;
+    }
+
+    function renderTranslationBanner() {
+      const banner = document.getElementById('translationPrompt');
+      if (!banner) return;
+      const suggested = getSuggestedTargetLang();
+      if (!shouldShowTranslationPrompt() || !suggested) {
+        banner.classList.add('hidden');
+        banner.innerHTML = '';
+        return;
+      }
+      banner.classList.remove('hidden');
+      const languageLabel = suggested === 'ru' ? 'русский' : suggested;
+      banner.innerHTML = `
+        <div class="translation-banner-copy">
+          Предложить перевод RSS-лент на <strong>${languageLabel}</strong>?
+        </div>
+        <div class="translation-banner-actions">
+          <button class="primary-btn" id="acceptTranslateBtn">Перевести</button>
+          <button class="secondary-btn" id="declineTranslateBtn">Нет, спасибо</button>
+        </div>
+      `;
+      const acceptBtn = document.getElementById('acceptTranslateBtn');
+      const declineBtn = document.getElementById('declineTranslateBtn');
+      if (acceptBtn) {
+        acceptBtn.onclick = async () => {
+          state.translateTargetLang = suggested;
+          state.translationConsent = 'accepted';
+          state.translateRss = true;
+          saveTranslationConsent('accepted', suggested);
+          banner.classList.add('hidden');
+          if (state.rssCacheRaw?.length) {
+            state.rssCache = await translateRssItems(state.rssCacheRaw);
+            state.articles = [...state.rssCache].sort((a, b) => b.score - a.score);
+            persistState();
+            scheduleRender();
+          } else {
+            loadRssFeeds();
+          }
+        };
+      }
+      if (declineBtn) {
+        declineBtn.onclick = () => {
+          state.translationConsent = 'declined';
+          saveTranslationConsent('declined', suggested);
+          banner.classList.add('hidden');
+        };
+      }
+    }
+
+    function setViewState(partialState) {
+      const previous = snapshotState();
+      Object.assign(state, partialState);
+      if (JSON.stringify(previous) !== JSON.stringify(snapshotState())) {
+        state.previousView = previous;
+      }
       render();
     }
 
-    function persistState() {
-      localStorage.setItem('newslab-state-v3', JSON.stringify({ liked: [...state.liked], saved: [...state.saved], activeTab: state.activeTab, activeLane: state.activeLane, category: state.category, mood: state.mood }));
+    function getFilteredArticles(viewState = state) {
+      let result = viewState.articles.filter(item => {
+        const lane = item.lane || (item.opinion ? 'opinion' : (item.video ? 'video' : 'main'));
+        const laneOk = viewState.activeLane === 'all' ||
+          (viewState.activeLane === 'main' && lane === 'main') ||
+          (viewState.activeLane === 'opinion' && (lane === 'opinion' || item.opinion)) ||
+          (viewState.activeLane === 'video' && (lane === 'video' || item.video)) ||
+          (viewState.activeLane === 'curation' && lane === 'curation');
+        return laneOk;
+      });
+      const q = viewState.search.trim().toLowerCase();
+      if (q) result = result.filter(item => [item.title, item.summary, item.source, item.author, item.tags.join(' ')].join(' ').toLowerCase().includes(q));
+      if (viewState.activeTab === 'saved') result = result.filter(item => viewState.liked.has(item.id));
+      return result.sort((a, b) => b.score - a.score);
     }
 
-    function getFilteredArticles() {
-      let result = state.articles.filter(item => {
-        const lane = item.lane || (item.opinion ? 'opinion' : (item.video ? 'video' : 'main'));
-        const laneOk = state.activeLane === 'all' ||
-          (state.activeLane === 'main' && lane === 'main') ||
-          (state.activeLane === 'opinion' && (lane === 'opinion' || item.opinion)) ||
-          (state.activeLane === 'video' && (lane === 'video' || item.video)) ||
-          (state.activeLane === 'curation' && lane === 'curation');
-        const categoryOk = state.category === 'all' || item.category === state.category;
-        const moodOk = state.mood === 'all' || item.mood === state.mood;
-        return laneOk && categoryOk && moodOk;
-      });
-      const q = state.search.trim().toLowerCase();
-      if (q) result = result.filter(item => [item.title, item.summary, item.source, item.author, item.tags.join(' ')].join(' ').toLowerCase().includes(q));
-      if (state.activeTab === 'saved') result = result.filter(item => state.saved.has(item.id));
-      return result.sort((a, b) => b.score - a.score);
+    function switchTab(nextTab) {
+      if (state.activeTab === nextTab) return;
+      state.previousView = snapshotState();
+      state.activeTab = nextTab;
+      const container = document.getElementById('feedContainer');
+      if (container) {
+        container.classList.add('is-loading');
+        container.innerHTML = '<div class="feed-skeleton-card"></div><div class="feed-skeleton-card"></div><div class="feed-skeleton-card"></div>';
+      }
+      setTimeout(() => render(), 80);
+    }
+
+    function renderTopbarTabs() {
+      const homeBtn = document.getElementById('homeBtn');
+      const favoritesBtn = document.getElementById('favoritesBtn');
+        if (homeBtn) homeBtn.classList.toggle('active', state.activeTab === 'feed');
+      if (favoritesBtn) favoritesBtn.classList.toggle('active', state.activeTab === 'saved');
     }
 
     function renderTabs() {
       const tabsEl = document.getElementById('tabs');
+      if (!tabsEl) return;
       tabsEl.innerHTML = tabs.map(tab => {
         const labels = { feed: 'Лента', collections: 'Подборки', saved: 'Избранное' };
-        const icons = { feed: 'fa-newspaper', collections: 'fa-layer-group', saved: 'fa-bookmark' };
+        const icons = { feed: 'fa-newspaper', collections: 'fa-layer-group', saved: 'fa-heart' };
         return `<button class="tab-btn ${state.activeTab === tab ? 'active' : ''}" data-tab="${tab}"><i class="fa-solid ${icons[tab]}"></i> ${labels[tab]}</button>`;
       }).join('');
-      tabsEl.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; render(); }));
+      tabsEl.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === state.activeTab));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => { state.activeTab = btn.dataset.tab; render(); }));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
     }
 
     function renderStories() {
-      const container = document.getElementById('stories');
-      container.innerHTML = state.stories.map(story => `<div class="story-pill"><strong>${story.title}</strong><span>${story.subtitle}</span></div>`).join('');
+      return;
     }
 
-    function renderTopics() {
-      const container = document.getElementById('topicRow');
-      container.innerHTML = [
-        ...categories.map(cat => `<button class="chip ${state.category === cat ? 'active' : ''}" data-category="${cat}">${cat === 'all' ? 'Все' : cat}</button>`),
-        ...moods.map(mood => `<button class="chip ${state.mood === mood ? 'active' : ''}" data-mood="${mood}">${mood === 'all' ? 'Любой тон' : mood}</button>`)
-      ].join('');
-      container.querySelectorAll('[data-category]').forEach(btn => btn.addEventListener('click', () => { state.category = btn.dataset.category; render(); }));
-      container.querySelectorAll('[data-mood]').forEach(btn => btn.addEventListener('click', () => { state.mood = btn.dataset.mood; render(); }));
+    function renderReels() {
+      return;
+    }
+
+
+    function buildAIDigest(items) {
+      const headlines = items.slice(0, 5).map(item => ({ title: item.title, source: item.source, time: item.time }));
+      const tokens = {};
+      items.forEach(item => {
+        item.title.split(/\W+/).forEach(word => {
+          const token = word.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '');
+          if (token.length > 4 && !['https', 'www', 'и', 'что', 'это', 'как', 'для'].includes(token)) {
+            tokens[token] = (tokens[token] || 0) + 1;
+          }
+        });
+      });
+      const topics = Object.entries(tokens)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([word]) => word);
+      return { headlines, topics };
+    }
+
+    function renderAIDigest() {
+      const aiCard = document.getElementById('aiCard');
+      const headlinesContainer = document.getElementById('aiHeadlines');
+      if (!aiCard || !headlinesContainer) return;
+      const digest = state.aiDigest || { headlines: [], topics: [] };
+      if (!digest.headlines.length) {
+        aiCard.classList.add('hidden');
+        headlinesContainer.innerHTML = '';
+        return;
+      }
+      aiCard.classList.remove('hidden');
+      headlinesContainer.innerHTML = digest.headlines.map((item, index) => `
+        <div class="ai-headline">
+          <span>${index + 1}</span>
+          <div><strong>${item.title}</strong><br/><small>${item.source} · ${item.time}</small></div>
+        </div>
+      `).join('');
     }
 
     function renderSectionNav() {
       const container = document.getElementById('sectionNav');
+      if (!container) return;
       container.innerHTML = lanes.map(lane => `<button class="section-btn ${state.activeLane === lane.key ? 'active' : ''}" data-lane="${lane.key}">${lane.label}</button>`).join('');
-      container.querySelectorAll('[data-lane]').forEach(btn => btn.addEventListener('click', () => { state.activeLane = btn.dataset.lane; render(); }));
+      container.querySelectorAll('[data-lane]').forEach(btn => btn.addEventListener('click', () => { setViewState({ activeLane: btn.dataset.lane }); }));
     }
 
-    function renderFeed() {
-      const container = document.getElementById('feedContainer');
-      if (state.activeTab === 'collections' || state.activeLane === 'curation') {
-        document.getElementById('feedCounter').textContent = `${collections.length} подборок`;
-        container.innerHTML = collections.map(item => `
+    function getInstantMediaPlaceholder(item) {
+      const from = '#16100c';
+      const to = '#ff9d35';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+        <defs><linearGradient id="g" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="${from}"/><stop offset="100%" stop-color="${to}"/></linearGradient></defs>
+        <rect width="1200" height="800" rx="36" fill="url(#g)"/>
+        <circle cx="920" cy="220" r="180" fill="rgba(255,255,255,0.16)"/>
+        <rect x="110" y="520" width="380" height="28" rx="14" fill="rgba(255,255,255,0.22)"/>
+        <rect x="110" y="570" width="280" height="24" rx="12" fill="rgba(255,255,255,0.16)"/>
+      </svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    function getMediaType(item) {
+      if (item.mediaType) return item.mediaType;
+      if (item.video || /video|clip|watch|live|stream/i.test(`${item.title} ${item.summary}`)) return 'video';
+      return 'image';
+    }
+
+    function getMediaUrl(item) {
+      if (item.media?.image) return item.media.image;
+      if (item.image) return item.image;
+      if (item.mediaType === 'video') {
+        return 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+      }
+      const seed = item.id || item.title;
+      return `https://picsum.photos/seed/${encodeURIComponent(String(seed))}/1200/800`;
+    }
+
+    function getMediaPoster(item) {
+      return item.poster || getInstantMediaPlaceholder(item);
+    }
+
+    function attachMediaCards(container) {
+      if (!container) return;
+      const mediaElements = Array.from(container.querySelectorAll('.cover-media'));
+      if (!mediaElements.length) return;
+      const loadMedia = (element) => {
+        const src = element.dataset.src;
+        if (!src || element.dataset.loaded === 'true') return;
+        element.dataset.loaded = 'true';
+        if (element.tagName === 'VIDEO') {
+          element.src = src;
+          element.preload = 'auto';
+          element.muted = true;
+          element.playsInline = true;
+          element.autoplay = true;
+          element.loop = true;
+          element.load();
+          element.addEventListener('canplay', () => element.classList.add('is-ready'), { once: true });
+          element.addEventListener('loadeddata', () => element.classList.add('is-ready'), { once: true });
+        } else {
+          element.src = src;
+          element.addEventListener('load', () => element.classList.add('is-ready'), { once: true });
+          element.addEventListener('error', () => element.classList.add('is-ready'), { once: true });
+        }
+      };
+      mediaElements.slice(0, 3).forEach(loadMedia);
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const target = entry.target;
+            loadMedia(target);
+            obs.unobserve(target);
+          });
+        }, { rootMargin: '220px 0px' });
+        mediaElements.slice(3).forEach(el => observer.observe(el));
+      } else {
+        mediaElements.slice(3).forEach(loadMedia);
+      }
+    }
+
+    function getRenderKey(viewState = state) {
+      return `${viewState.activeTab}|${viewState.activeLane}|${viewState.search}|${viewState.liked.size}`;
+    }
+
+    function getFeedMarkup(viewState = state) {
+      const key = getRenderKey(viewState);
+      if (state.viewCache[key]) return state.viewCache[key];
+      const result = (() => {
+      if (viewState.activeTab === 'collections' || viewState.activeLane === 'curation') {
+        const markup = collections.map(item => `
           <article class="feed-card" style="border-left: 4px solid ${item.color};">
             <div class="feed-head">
               <div class="meta"><span><i class="fa-solid fa-layer-group"></i> Подборка</span></div>
@@ -456,90 +998,298 @@
             <div class="meta"><span><i class="fa-solid fa-bolt"></i> Готово к чтению</span></div>
           </article>
         `).join('');
-        return;
+        return { markup, counterText: `${collections.length} подборок` };
       }
-      const filtered = getFilteredArticles();
-      document.getElementById('feedCounter').textContent = `${filtered.length} материалов`;
+      const filtered = getFilteredArticles(viewState);
       if (!filtered.length) {
-        container.innerHTML = '<div class="empty">Под этот фильтр пока нет материалов. Попробуйте сменить тему или поиск.</div>';
-        return;
+        return { markup: '<div class="empty">Нет материалов. Попробуйте поиск или обновите ленту.</div>', counterText: '0 материалов' };
       }
-      container.innerHTML = filtered.map(item => {
-        const liked = state.liked.has(item.id);
-        const saved = state.saved.has(item.id);
-        const badge = item.opinion ? '<span class="badge opinion"><i class="fa-solid fa-pen-nib"></i> Мнение</span>' : '<span class="badge rss"><i class="fa-solid fa-rss"></i> RSS</span>';
+      const markup = filtered.map((item, index) => {
+        const liked = viewState.liked.has(item.id);
+        const displayTime = item.time.replace(/\s*[AP]M$/i, '');
+        const cover = 'linear-gradient(135deg, #111827 0%, #221107 100%)';
+        const mediaType = getMediaType(item);
+        const mediaUrl = getMediaUrl(item);
+        const mediaPoster = getMediaPoster(item);
+        const mediaMarkup = mediaType === 'video'
+          ? `<video class="cover-media" data-src="${mediaUrl}" poster="${mediaPoster}" preload="metadata" muted playsinline></video>`
+          : `<img class="cover-media" data-src="${mediaUrl}" alt="${item.title}" src="${mediaPoster}" loading="lazy" decoding="async" />`;
         return `
-          <article class="feed-card" data-id="${item.id}">
-            <div class="feed-head">
-              <div class="meta"><span>${item.source}</span><span>•</span><span>${item.time}</span></div>
-              ${badge}
+          <article class="feed-card" data-id="${item.id}" style="--delay:${index * 70}ms">
+            <div class="card-top">
+              <div class="author"><div class="avatar-mini">${item.author.charAt(0)}</div>${item.author}</div>
+              <span class="badge rss">${item.source}</span>
+            </div>
+            <div class="cover" style="background:${cover};">
+              ${mediaMarkup}
+              <div class="cover-overlay">
+                <div class="cover-top">
+                  <span class="cover-score">${item.score}</span>
+                </div>
+                <strong>${item.title}</strong>
+                <div class="cover-foot"><span>${displayTime}</span></div>
+              </div>
+              ${mediaType === 'video' ? '<span class="media-badge"><i class="fa-solid fa-play"></i> video</span>' : ''}
+            </div>
+            <div class="post-preview">
+              <span>${item.summary}</span>
             </div>
             <h4>${item.title}</h4>
             <p>${item.summary}</p>
-            <div class="meta"><span><i class="fa-solid fa-user"></i> ${item.author}</span><span>•</span><span><i class="fa-solid fa-tag"></i> ${item.category}</span><span>•</span><span><i class="fa-solid fa-sparkles"></i> ${item.mood}</span></div>
-            <div class="actions">
-              <button class="action-btn ${liked ? 'active' : ''}" data-action="like" data-id="${item.id}"><i class="fa-solid fa-heart"></i> ${liked ? 'Нравится' : 'Лайк'}</button>
-              <button class="action-btn ${saved ? 'active' : ''}" data-action="save" data-id="${item.id}"><i class="fa-solid fa-bookmark"></i> ${saved ? 'Сохранено' : 'Сохранить'}</button>
-              <button class="action-btn" data-action="open" data-id="${item.id}"><i class="fa-solid fa-arrow-right"></i> Читать</button>
+            <div class="feed-foot center-row">
+              <span class="meta"><i class="fa-solid fa-clock"></i> ${displayTime}</span>
+              <button class="action-btn icon-only ${liked ? 'active' : ''} like-btn" data-action="like" data-id="${item.id}" aria-label="Лайк"><i class="fa-solid fa-heart"></i></button>
+              <button class="action-btn icon-only" data-action="open" data-id="${item.id}" aria-label="Читать"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
           </article>`;
       }).join('');
-      container.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const id = Number(btn.dataset.id);
-        const action = btn.dataset.action;
-        if (action === 'like') toggleLike(id);
-        if (action === 'save') toggleSave(id);
-        if (action === 'open') openModal(id);
-      }));
-      container.querySelectorAll('.feed-card').forEach(card => card.addEventListener('click', e => {
-        if (!e.target.closest('[data-action]')) openModal(Number(card.dataset.id));
-      }));
+      return { markup, counterText: `${filtered.length} материалов` };
+      })();
+      state.viewCache[key] = result;
+      return result;
+    }
+
+    function renderFeed() {
+      const container = document.getElementById('feedContainer');
+      const key = getRenderKey();
+      if (state.lastRenderKey === key && container.innerHTML) {
+        return;
+      }
+      const payload = state.prefetchCache[state.activeTab] || getFeedMarkup();
+      if (!state.prefetchCache[state.activeTab]) state.prefetchCache[state.activeTab] = payload;
+      container.classList.add('is-switching');
+      requestAnimationFrame(() => {
+        container.innerHTML = payload.markup;
+        container.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const id = Number(btn.dataset.id);
+          const action = btn.dataset.action;
+          if (action === 'like') {
+            // immediate visual feedback
+            btn.classList.toggle('active');
+            toggleLike(id);
+          }
+          if (action === 'open') openModal(id);
+        }));
+        container.querySelectorAll('.feed-card').forEach(card => card.addEventListener('click', e => {
+          if (!e.target.closest('[data-action]')) openModal(Number(card.dataset.id));
+        }));
+        attachMediaCards(container);
+        container.classList.remove('is-switching');
+        container.classList.remove('is-loading');
+        state.lastRenderKey = key;
+      });
+    }
+
+    function scheduleRender() {
+      if (state.pendingRerender) return;
+      state.pendingRerender = requestAnimationFrame(() => {
+        state.pendingRerender = null;
+        render();
+      });
     }
 
     function renderOpinions() {
       const container = document.getElementById('opinionContainer');
+      if (!container) return;
       container.innerHTML = state.opinions.map(item => `<div class="mini-card"><h4>${item.title}</h4><p>${item.body}</p></div>`).join('');
     }
 
     function renderCollections() {
       const container = document.getElementById('collectionContainer');
+      if (!container) return;
       container.innerHTML = collections.map(item => `<div class="mini-card" style="border-left: 4px solid ${item.color};"><h4>${item.title}</h4><p>${item.subtitle}</p></div>`).join('');
     }
 
     function renderTrends() {
       const container = document.getElementById('trendContainer');
+      if (!container) return;
       container.innerHTML = state.trends.map((item, index) => `<div class="trend-item"><strong>${index + 1}. ${item}</strong><span>${index === 0 ? 'горячо' : 'на росте'}</span></div>`).join('');
     }
 
     function renderDashboard() {
-      document.getElementById('focusCount').textContent = state.articles.length;
-      document.getElementById('savedCount').textContent = state.saved.size;
-      document.getElementById('likeCount').textContent = state.liked.size;
-      document.getElementById('collectionCount').textContent = collections.length;
+      const focusCount = document.getElementById('focusCount');
+      const likeCount = document.getElementById('likeCount');
+      const collectionCount = document.getElementById('collectionCount');
+      if (focusCount) focusCount.textContent = state.articles.length;
+      if (likeCount) likeCount.textContent = state.liked.size;
+      if (collectionCount) collectionCount.textContent = collections.length;
+    }
+
+    function prefetchNextTab() {
+      const order = ['feed', 'collections', 'saved'];
+      const currentIndex = order.indexOf(state.activeTab);
+      const nextTab = order[(currentIndex + 1) % order.length];
+      if (!state.prefetchCache[nextTab]) {
+        state.prefetchCache[nextTab] = getFeedMarkup({ ...state, activeTab: nextTab });
+      }
+      const previousTab = order[(currentIndex + 2) % order.length];
+      if (!state.prefetchCache[previousTab]) {
+        state.prefetchCache[previousTab] = getFeedMarkup({ ...state, activeTab: previousTab });
+      }
+    }
+
+    function updateLiveStatus() {
+      const badge = document.getElementById('liveStatus');
+      if (!badge) return;
+      const delta = Math.max(0, Math.floor((Date.now() - (state.lastRefreshAt || Date.now())) / 1000));
+      const label = delta < 5 ? 'обновлено только что' : delta < 60 ? `обновлено ${delta}с назад` : `обновлено ${Math.floor(delta / 60)}м назад`;
+      badge.innerHTML = `<span class="dot"></span> ${label}`;
+      badge.classList.toggle('is-refreshing', delta < 5);
+    }
+
+    function startLiveTicker() {
+      updateLiveStatus();
+      if (state.liveTicker) return;
+      state.liveTicker = setInterval(updateLiveStatus, 1000);
+    }
+
+    function renderOverlays() {
+      const storyOverlay = document.getElementById('storyOverlay');
+      const reelOverlay = document.getElementById('reelOverlay');
+      if (storyOverlay) {
+        storyOverlay.classList.toggle('is-open', state.storyOverlayOpen);
+        storyOverlay.setAttribute('aria-hidden', state.storyOverlayOpen ? 'false' : 'true');
+        const story = stories[state.activeStoryIndex] || stories[0];
+        const storyMedia = document.getElementById('storyMedia');
+        const storyProgress = document.getElementById('storyProgress');
+        if (storyMedia) {
+          storyMedia.innerHTML = `
+            <div class="story-content">
+              <h4>${story.title}</h4>
+              <p>${story.body}</p>
+            </div>
+          `;
+        }
+        if (storyProgress) {
+          storyProgress.innerHTML = stories.map((_, index) => `<span>${index <= state.activeStoryIndex ? '<i></i>' : ''}</span>`).join('');
+          const bars = storyProgress.querySelectorAll('span i');
+          bars.forEach((bar, index) => {
+            if (index === state.activeStoryIndex) {
+              bar.style.animation = 'storyProgress 3.8s linear forwards';
+            }
+          });
+        }
+      }
+      if (reelOverlay) {
+        reelOverlay.classList.toggle('is-open', state.reelOverlayOpen);
+        reelOverlay.setAttribute('aria-hidden', state.reelOverlayOpen ? 'false' : 'true');
+        const reelStack = document.getElementById('reelStack');
+        if (reelStack) {
+          const reel = reels[state.activeReelIndex] || reels[0];
+          reelStack.innerHTML = `
+            <div class="reel-item">
+              <strong>${reel.title}</strong>
+              <span>${reel.body}</span>
+            </div>
+            <div class="reel-item">
+              <strong>${reel.subtitle}</strong>
+              <span>Переключитесь на следующий экран или закройте overlay.</span>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function setOverlayBodyLock() {
+      document.body.classList.toggle('overlay-open', state.storyOverlayOpen || state.reelOverlayOpen);
+    }
+
+    function startStoryAutoAdvance() {
+      if (state.storyTimer) clearInterval(state.storyTimer);
+      state.storyTimer = setInterval(() => {
+        if (!state.storyOverlayOpen) return;
+        state.activeStoryIndex = (state.activeStoryIndex + 1) % stories.length;
+        renderOverlays();
+      }, 4200);
+    }
+
+    function openStory(index) {
+      state.activeStoryIndex = index;
+      state.storyOverlayOpen = true;
+      renderOverlays();
+      setOverlayBodyLock();
+      startStoryAutoAdvance();
+    }
+
+    function closeStory() {
+      state.storyOverlayOpen = false;
+      if (state.storyTimer) { clearInterval(state.storyTimer); state.storyTimer = null; }
+      renderOverlays();
+      setOverlayBodyLock();
+    }
+
+    function openReel(index) {
+      state.activeReelIndex = index;
+      state.reelOverlayOpen = true;
+      renderOverlays();
+      setOverlayBodyLock();
+    }
+
+    function closeReel() {
+      state.reelOverlayOpen = false;
+      renderOverlays();
+      setOverlayBodyLock();
     }
 
     function render() {
+      const app = document.querySelector('.app');
+      app && app.classList.add('is-switching');
+      const key = getRenderKey();
+      state.viewHistory[key] = state.viewHistory[key] || { activeTab: state.activeTab, activeLane: state.activeLane };
       renderTabs();
       renderStories();
+      renderReels();
       renderSectionNav();
-      renderTopics();
+      renderTranslationBanner();
+      renderAIDigest();
       renderFeed();
       renderOpinions();
       renderCollections();
       renderTrends();
       renderDashboard();
+      renderOverlays();
       persistState();
+      prefetchNextTab();
+      requestAnimationFrame(() => app && app.classList.remove('is-switching'));
+    }
+
+    function persistState() {
+      localStorage.setItem('newslab-state-v3', JSON.stringify({
+        liked: [...state.liked],
+        activeTab: state.activeTab,
+        activeLane: state.activeLane,
+        translateRss: state.translateRss,
+        translateTargetLang: state.translateTargetLang
+      }));
     }
 
     function toggleLike(id) {
       if (state.liked.has(id)) state.liked.delete(id); else state.liked.add(id);
-      render();
+      // immediate persistence so favorites survive reloads
+      persistState();
+      // update any existing like buttons in DOM to reflect new state without full rerender
+      document.querySelectorAll(`[data-action="like"][data-id="${id}"]`).forEach(btn => btn.classList.toggle('active', state.liked.has(id)));
+      // update like counter if present
+      const likeCount = document.getElementById('likeCount');
+      if (likeCount) likeCount.textContent = state.liked.size;
+      // invalidate caches so next full render (if any) is fresh, but avoid immediate full rerender to prevent flicker
+      state.viewCache = {};
+      state.renderVersion += 1;
     }
 
-    function toggleSave(id) {
-      if (state.saved.has(id)) state.saved.delete(id); else state.saved.add(id);
-      render();
+
+    function restoreView(snapshot = state.previousView) {
+      if (!snapshot) return;
+      setViewState({
+        activeTab: snapshot.activeTab || state.activeTab,
+        activeLane: snapshot.activeLane || state.activeLane,
+        search: snapshot.search || ''
+      });
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
     }
 
     function openModal(id) {
@@ -547,70 +1297,247 @@
       if (!item) return;
       const modal = document.getElementById('modal');
       const card = document.getElementById('modalCard');
+      const mediaType = getMediaType(item);
+      const mediaUrl = getMediaUrl(item);
+      const mediaPoster = getMediaPoster(item);
+      const mediaMarkup = mediaType === 'video'
+        ? `<div class="media-preview"><video src="${mediaUrl}" poster="${mediaPoster}" controls muted playsinline autoplay loop></video></div>`
+        : `<div class="media-preview"><img src="${mediaUrl}" alt="${item.title}" /></div>`;
       card.innerHTML = `
         <button class="close-btn" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
-        <div class="eyebrow"><i class="fa-solid fa-pen-nib"></i> ${item.category.toUpperCase()}</div>
         <h3>${item.title}</h3>
         <div class="meta" style="margin-bottom: 12px;"><span><i class="fa-solid fa-user"></i> ${item.author}</span><span>•</span><span>${item.source}</span><span>•</span><span>${item.time}</span></div>
+        ${mediaMarkup}
         <p>${item.body}</p>
         <p>${item.summary}</p>
         <div class="meta" style="margin-top: 14px;">${item.tags.map(tag => `<span class="badge rss">#${tag}</span>`).join('')}</div>
         <div class="hero-actions" style="margin-top: 16px;">
-          <button class="primary-btn" id="saveModalBtn"><i class="fa-solid fa-bookmark"></i> ${state.saved.has(item.id) ? 'Убрать из избранного' : 'В избранное'}</button>
-          <button class="secondary-btn" id="likeModalBtn"><i class="fa-solid fa-heart"></i> ${state.liked.has(item.id) ? 'Убрать лайк' : 'Поставить лайк'}</button>
+          <button class="secondary-btn icon-only" id="likeModalBtn" title="Лайк"><i class="fa-solid fa-heart"></i></button>
         </div>`;
       modal.classList.add('open');
-      document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('open'));
-      document.getElementById('saveModalBtn').addEventListener('click', () => { toggleSave(item.id); modal.classList.remove('open'); });
-      document.getElementById('likeModalBtn').addEventListener('click', () => { toggleLike(item.id); modal.classList.remove('open'); });
-      modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+      document.getElementById('modalClose').onclick = closeModal;
+      document.getElementById('likeModalBtn').onclick = () => { toggleLike(item.id); closeModal(); };
+      modal.onclick = e => { if (e.target === modal) closeModal(); };
+    }
+
+    function withTimeout(promise, ms) {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+      ]);
+    }
+
+    function normalizeRssItem(item, index) {
+      const title = item.title || 'RSS материал';
+      const description = (item.description || item.summary || '').replace(/<[^>]*>/g, '').trim();
+      const summary = description.slice(0, 140) || 'Свежая заметка в ленте.';
+      const body = (item.body || description || summary).slice(0, 240);
+      const source = item.source || item.author || 'RSS feed';
+      const author = item.author || item.source || source || 'RSS-агент';
+      const image = item.image || item.enclosure?.link || item.thumbnail || item.mediaUrl || undefined;
+      const pubDate = item.pubDate || item.published || item.updated || '';
+      const time = pubDate ? new Date(pubDate).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : 'ново';
+      const mediaType = item.mediaType || /video|clip|watch|live|stream/i.test(title) ? 'video' : 'image';
+      return {
+        id: 1000 + index + Math.floor(Math.random() * 1000),
+        title,
+        summary,
+        source,
+        author,
+        time,
+        opinion: false,
+        tags: ['rss', 'live'],
+        body,
+        score: 90 + index,
+        mediaType,
+        image,
+        poster: image
+      };
+    }
+
+    function parseRssXml(xmlText) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xmlText, 'application/xml');
+      const channelTitle = doc.querySelector('channel > title')?.textContent || 'RSS feed';
+      const items = Array.from(doc.querySelectorAll('item')).slice(0, 1).map((node, index) => {
+        const title = node.querySelector('title')?.textContent || '';
+        const description = node.querySelector('description')?.textContent || node.querySelector('summary')?.textContent || '';
+        const source = node.querySelector('source')?.textContent || channelTitle;
+        const author = node.querySelector('author')?.textContent || source;
+        const pubDate = node.querySelector('pubDate')?.textContent || node.querySelector('updated')?.textContent || '';
+        const enclosure = node.querySelector('enclosure');
+        const mediaThumbnail = node.getElementsByTagName('media:thumbnail')[0]?.getAttribute('url') || node.getElementsByTagName('thumbnail')[0]?.getAttribute('url');
+        const image = enclosure?.getAttribute('url') || mediaThumbnail || undefined;
+        return normalizeRssItem({ title, description, source, author, pubDate, image, enclosure: { link: image } }, index);
+      });
+      return items.filter(item => item.title && item.summary);
+    }
+
+    async function fetchRssFeed(url) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 1400);
+      try {
+        const response = await withTimeout(fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`, {
+          signal: controller.signal,
+          headers: { Accept: 'application/json' },
+          cache: 'no-store'
+        }), 2000);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data.items) && data.items.length) {
+            return data.items.slice(0, 1).map((item, index) => normalizeRssItem(item, index));
+          }
+        }
+      } catch (e) {
+        // fallback to XML parsing proxy
+      } finally {
+        clearTimeout(timer);
+      }
+
+      try {
+        const controller2 = new AbortController();
+        const timer2 = setTimeout(() => controller2.abort(), 6000);
+        const response = await withTimeout(fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, {
+          signal: controller2.signal,
+          cache: 'no-store'
+        }), 6500);
+        if (!response.ok) return [];
+        const xmlText = await response.text();
+        return parseRssXml(xmlText);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    async function translateText(text) {
+      if (!text) return text;
+      try {
+        const response = await withTimeout(fetch('https://libretranslate.de/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q: text, source: 'auto', target: state.translateTargetLang || 'ru', format: 'text' })
+        }), 9000);
+        if (!response.ok) return text;
+        const json = await response.json();
+        return json.translatedText || text;
+      } catch (e) {
+        return text;
+      }
+    }
+
+    async function translateRssItems(items) {
+      const translated = [];
+      for (const item of items) {
+        const [title, summary, body] = await Promise.all([
+          translateText(item.title),
+          translateText(item.summary),
+          translateText(item.body)
+        ]);
+        translated.push({ ...item, title, summary, body });
+      }
+      return translated;
     }
 
     async function loadRssFeeds() {
-      const sources = [
-        'https://feeds.feedburner.com/techcrunch',
-        'https://www.reddit.com/r/technology/.rss',
-        'https://feeds.bbci.co.uk/news/world/rss.xml'
-      ];
-      let combined = [];
-      for (const url of sources) {
-        try {
-          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-          if (!response.ok) continue;
-          const data = await response.json();
-          if (Array.isArray(data.items)) combined = combined.concat(data.items.slice(0, 2));
-        } catch (e) {}
+      if (state.rssLoading) return;
+      state.rssLoading = true;
+      const cachedItems = state.rssCache || [];
+      if (cachedItems.length) {
+        state.articles = [...cachedItems].sort((a, b) => b.score - a.score);
+        scheduleRender();
       }
-      if (combined.length) {
-        const rssItems = combined.slice(0, 8).map((item, index) => ({
-          id: 1000 + index,
-          title: item.title || 'RSS материал',
-          summary: (item.description || '').replace(/<[^>]*>/g, '').slice(0, 140) || 'Источник добавлен в редакционный поток.',
-          source: item.author || 'RSS feed',
-          author: 'RSS-агент',
-          category: index % 2 === 0 ? 'технологии' : 'политика',
-          mood: index % 2 === 0 ? 'технологичный' : 'сильный',
-          time: 'ново',
-          opinion: false,
-          tags: ['rss', 'stream'],
-          body: 'Это живой RSS-материал, который попадает в общую ленту и обрабатывается как редакционный материал.',
-          score: 70 + index
-        }));
-        state.articles = [...baseArticles, ...rssItems].sort((a, b) => b.score - a.score);
+      const settled = await Promise.allSettled(rssSources.map(source => fetchRssFeed(source.url)));
+      const combined = settled.filter(result => result.status === 'fulfilled').flatMap(result => result.value);
+      const uniqueItems = [...new Map(combined.map(item => [`${item.source}::${item.title}`, item])).values()];
+      const rssRawItems = uniqueItems.slice(0, 500).map((item, index) => ({ ...item, id: 1000 + index }));
+      state.aiScanSources = rssSources.length;
+      state.aiDigest = buildAIDigest(rssRawItems);
+      if (rssRawItems.length) {
+        const rssTranslated = state.translateRss ? await translateRssItems(rssRawItems) : rssRawItems;
+        state.rssCacheRaw = rssRawItems;
+        state.rssCache = rssTranslated;
+        state.rssUpdatedAt = Date.now();
+        state.lastRefreshAt = Date.now();
+        updateLiveStatus();
+        localStorage.setItem('newslab-rss-cache-v1', JSON.stringify({ items: rssTranslated, rawItems: rssRawItems, updatedAt: state.rssUpdatedAt }));
+        state.articles = [...rssTranslated].sort((a, b) => b.score - a.score);
+        scheduleRender();
       }
-      render();
+      state.rssLoading = false;
     }
 
-    document.getElementById('searchBox').addEventListener('input', e => { state.search = e.target.value; render(); });
-    document.getElementById('refreshBtn').addEventListener('click', async () => {
-      document.getElementById('refreshBtn').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-      await loadRssFeeds();
-      document.getElementById('refreshBtn').innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
-    });
-    document.getElementById('openFeedBtn').addEventListener('click', () => { state.activeTab = 'feed'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-    document.getElementById('openCollectionsBtn').addEventListener('click', () => { state.activeTab = 'collections'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    function startAutoRssRefresh() {
+      if (state.rssRefreshTimer) return;
+      state.rssRefreshTimer = setInterval(() => {
+        if (!state.rssLoading) loadRssFeeds();
+      }, 60000);
+    }
 
+    function handleSwipe() {
+      const app = document.querySelector('.app');
+      if (!app) return;
+      const order = ['feed', 'collections', 'saved'];
+      const currentIndex = order.indexOf(state.activeTab);
+      if (currentIndex < 0) return;
+      const delta = state.touchEndX - state.touchStartX;
+      if (Math.abs(delta) < 70) return;
+      const nextIndex = delta < 0 ? (currentIndex + 1) % order.length : (currentIndex + order.length - 1) % order.length;
+      switchTab(order[nextIndex]);
+    }
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swipeTarget = document.querySelector('.app');
+    if (swipeTarget) {
+      swipeTarget.addEventListener('touchstart', e => { state.touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+      swipeTarget.addEventListener('touchend', e => { state.touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        if (state.storyOverlayOpen) closeStory();
+        if (state.reelOverlayOpen) closeReel();
+      }
+    });
+    document.getElementById('closeStoryBtn').addEventListener('click', closeStory);
+    document.getElementById('closeReelBtn').addEventListener('click', closeReel);
+    document.querySelectorAll('[data-close="story"]').forEach(el => el.addEventListener('click', closeStory));
+    document.querySelectorAll('[data-close="reel"]').forEach(el => el.addEventListener('click', closeReel));
+    document.getElementById('nextStoryBtn').addEventListener('click', () => {
+      state.activeStoryIndex = (state.activeStoryIndex + 1) % stories.length;
+      renderOverlays();
+    });
+    document.getElementById('prevStoryBtn').addEventListener('click', () => {
+      state.activeStoryIndex = (state.activeStoryIndex - 1 + stories.length) % stories.length;
+      renderOverlays();
+    });
+    const homeBtn = document.getElementById('homeBtn');
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => { switchTab('feed'); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+    const favoritesBtn = document.getElementById('favoritesBtn');
+    if (favoritesBtn) {
+      favoritesBtn.addEventListener('click', () => { switchTab('saved'); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+    const openCollectionsBtn = document.getElementById('openCollectionsBtn');
+    if (openCollectionsBtn) {
+      openCollectionsBtn.addEventListener('click', () => { switchTab('collections'); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+
+    function updateMobileNavOpacity() {
+      const nav = document.getElementById('mobileNav');
+      if (!nav) return;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = pageHeight > 0 ? scrollTop / pageHeight : 0;
+      const opacity = progress <= 0.7 ? 1 : Math.max(0, 1 - (progress - 0.7) / 0.3);
+      nav.style.setProperty('--mobile-nav-opacity', opacity.toFixed(3));
+    }
+    window.addEventListener('scroll', updateMobileNavOpacity, { passive: true });
+    window.addEventListener('resize', updateMobileNavOpacity);
+    updateMobileNavOpacity();
     hydrateState();
+    startAutoRssRefresh();
   </script>
 </body>
 </html>
